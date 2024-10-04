@@ -1,0 +1,159 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #000033;
+    padding: 20px 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.sub-header {
+    display: flex;
+    align-items: center;
+}
+
+.header img.logo {
+    width: 50px;
+    margin-right: 15px;
+}
+
+.header p {
+    color: white;
+    font-size: 24px;
+    font-weight: bolder;
+    margin: 0;
+}
+
+.profile-dropdown{
+    display: flex;
+}
+
+.dashboard {
+    display: flex;
+    width: 100%;
+    flex: 1;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: whitesmoke;
+    padding-top: 20px;
+    height: 100%;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    display: flex;
+    padding: 1%;
+    margin-left: 15px;
+}
+
+.sidebar ul li a {
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar ul li a i {
+    margin-right: 8px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #495057;
+}
+
+.content {
+    flex: 1;
+    padding: 40px;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.content h1 {
+    font-size: 28px;
+    color: #343a40;
+    margin-top: 0;
+}
+
+.packages {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.packages h2 {
+    font-size: 24px;
+    color: #343a40;
+    width: 100%;
+}
+
+.package {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    flex: 1 1 calc(33.333% - 40px);
+    box-sizing: border-box;
+    max-width: calc(33.333% - 40px);
+    background-color: #fff;
+}
+
+.package:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.package-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.package-icon {
+    font-size: 40px;
+    color: #007bff;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.package h3 {
+    font-size: 20px;
+    color: #007bff;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.package p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #555;
+}
+

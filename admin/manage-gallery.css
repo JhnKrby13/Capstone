@@ -1,0 +1,196 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 110vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #000033;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header img.logo {
+    width: 50px;
+    height: auto;
+}
+
+.header h1 {
+    color: white;
+    font-size: 24px;
+    margin: 0;
+    margin-right: 1070px;
+}
+
+.dashboard {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 60px);
+}
+
+.sidebar {
+    width: 250px;
+    background-color: whitesmoke;
+    padding-top: 20px;
+    height: 110%;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px 15px;
+    margin: 0;
+}
+
+.sidebar ul li a {
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #495057;
+}
+
+.content {
+    flex: 1;
+    padding: 40px;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    height: 90vh;
+}
+
+.content h1 {
+    font-size: 28px;
+    color: #343a40;
+    margin-top: 0;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 16px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.create-folder {
+    margin-bottom: 30px;
+}
+
+.gallery {
+    margin-top: 20px;
+}
+
+.gallery h2 {
+    font-size: 24px;
+    color: #343a40;
+}
+
+.folders {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.folders li {
+    width: 100px;
+    margin: 10px;
+    text-align: center;
+}
+
+.folders li a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+}
+
+.folders li img {
+    width: 50px;
+    height: 50px;
+}
+
+.img-thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+table img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.lightbox img {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+.lightbox.show {
+    display: flex;
+}

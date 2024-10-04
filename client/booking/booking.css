@@ -1,0 +1,406 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #000033;
+    padding: 20px 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.sub-header {
+    display: flex;
+    align-items: center;
+}
+
+.header img.logo {
+    width: 50px;
+    margin-right: 15px;
+}
+
+.header p {
+    color: white;
+    font-size: 24px;
+    font-weight: bolder;
+    margin: 0;
+}
+.profile-dropdown{
+    display: flex;
+}
+
+.dashboard {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: whitesmoke;
+    padding-top: 20px;
+    height: 98%;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    display: flex;
+    padding: 1%;
+    margin-left: 15px;
+}
+
+.sidebar ul li a {
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar ul li a i {
+    margin-right: 8px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #495057;
+}
+
+.content {
+    flex: 1;
+    padding: 40px;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.content h1 {
+    font-size: 28px;
+    color: #343a40;
+    margin-top: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="email"],
+select,
+input[type="datetime"],
+input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.radio-group input[type="radio"] {
+    display: none;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.radio-group input[type="radio"]:checked + label {
+    background-color: #007bff;
+    color: white;
+}
+
+.radio-group label:hover {
+    background-color: #f1f1f1;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 3%;
+    padding: 10px;
+}
+
+input[type="submit"]:hover {
+    opacity: 0.9;
+}
+
+h2 {
+    font-size: 24px;
+    color: red;
+    margin: 20px 0 10px;
+    justify-items: center;
+    align-items: center;
+}
+
+.ui-datepicker {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 1000;
+}
+
+.ui-datepicker-header {
+    background: linear-gradient(145deg, #007bff, #0056b3);
+    color: white;
+    border-bottom: 1px solid #004a8a;
+    padding: 16px;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+    box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ui-datepicker-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0;
+}
+
+.ui-datepicker-prev,
+.ui-datepicker-next {
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 36px;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    background: #0056b3;
+    color: white;
+    font-size: 20px;
+}
+
+.ui-datepicker-prev:hover,
+.ui-datepicker-next:hover {
+    background: #003f7d;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ui-datepicker-prev:before,
+.ui-datepicker-next:before {
+    font-family: 'FontAwesome';
+    content: '\f053'; 
+}
+
+.ui-datepicker-next:before {
+    content: '\f054'; 
+}
+
+.ui-datepicker-calendar {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.ui-datepicker-calendar td {
+    padding: 12px;
+    text-align: center;
+}
+
+.ui-datepicker-calendar td:hover {
+    background: #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    transform: scale(1.05);
+}
+
+.ui-datepicker-calendar .ui-state-active {
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.ui-datepicker-calendar .ui-state-highlight {
+    background: #0056b3;
+    color: white;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+/* Timepicker Styles */
+.ui-timepicker-div {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.ui-timepicker-div .ui-widget-header {
+    background: linear-gradient(145deg, #007bff, #0056b3);
+    color: white;
+    border-bottom: 1px solid #004a8a;
+    padding: 16px;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ui-timepicker-div .ui-widget-content {
+    background: #ffffff;
+    border: none;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.ui-timepicker-div .ui-timepicker-table {
+    width: 100%;
+}
+
+.ui-timepicker-div .ui-timepicker-table tr td {
+    padding: 12px;
+    text-align: center;
+}
+
+.ui-timepicker-div .ui-timepicker-table tr td:hover {
+    background: #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    transform: scale(1.05);
+}
+
+.ui-timepicker-div .ui-timepicker-table .ui-state-active {
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.ui-timepicker-div .ui-timepicker-table .ui-state-highlight {
+    background: #0056b3;
+    color: white;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="submit"],
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.swal2-popup {
+    font-family: Arial, sans-serif;
+    border-radius: 5px;
+}
+
+.swal2-title {
+    font-size: 1.5rem;
+}
+
+.swal2-content {
+    font-size: 1.1rem;
+}
+
+.swal2-icon {
+    font-size: 2.5rem;
+}
+
+.swal2-confirm,
+.swal2-cancel {
+    padding: 10px 20px;
+    margin-left: 10px;
+    font-size: 1.1rem;
+}
+
+.swal2-confirm {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+}
+
+.swal2-confirm:hover {
+    background-color: #218838;
+}
+
+.swal2-cancel {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+}
+
+.swal2-cancel:hover {
+    background-color: #c82333;
+}
+
+.btn-primary {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-left: 260px; 
+    width: 100%;
+    max-width: 50%;
+}
+
+.btn-primary:hover {
+    background-color: #c82333;
+}

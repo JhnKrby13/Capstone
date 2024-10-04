@@ -1,0 +1,11 @@
+CREATE TABLE bookings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    package_type VARCHAR(255) NOT NULL,
+    cost DECIMAL(10, 2) NOT NULL,
+    venue VARCHAR(255) NOT NULL,
+    datetime DATETIME NOT NULL,
+    payment_mode VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
