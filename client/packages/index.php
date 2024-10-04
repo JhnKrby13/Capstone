@@ -95,7 +95,7 @@ try {
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p>No packages found</p>s
+                    <p>No packages found</p>
                 <?php endif; ?>
             </div>
         </div>
