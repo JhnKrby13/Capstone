@@ -1,3 +1,4 @@
+<?php
 function cleanupOldArchiveRecords() {
     global $pdo;
 
@@ -20,3 +21,5 @@ function cleanupOldArchiveRecords() {
 
 // Call the function (you can schedule this script to run daily)
 cleanupOldArchiveRecords();
+
+?>
