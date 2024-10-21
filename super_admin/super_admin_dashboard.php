@@ -106,7 +106,7 @@ $data = fetchData($pdo);
     <div class="dashboard">
         <div class="sidebar">
             <ul>
-                <li><a href="super_admin_dashboard.php"><i class="fas fa-home"></i> Super Admin Dashboard</a></li>
+                <li><a href="super_admin_dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> Manage Bookings</a></li>
                 <li><a href="manage-packages.php"><i class="fas fa-box"></i> Manage Packages</a></li>
                 <li><a href="manage-photographer.php"><i class="fas fa-camera"></i> Manage Photographers</a></li>

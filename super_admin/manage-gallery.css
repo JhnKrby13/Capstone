@@ -92,3 +92,43 @@ body {
 .dashboard-overview {
     margin-top: 20px;
 }
+
+/* Additional CSS for Photographer List and Photos */
+.photographers-list {
+    margin-top: 20px;
+}
+
+.photographers-list ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+.photographers-list ul li {
+    margin-bottom: 10px;
+}
+
+.photographers-list ul li a {
+    color: #000033;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.photographers-list ul li a:hover {
+    color: #343a40;
+}
+
+.photos-gallery {
+    margin-top: 30px;
+}
+
+.photos-gallery #photos-container img {
+    max-width: 150px;
+    margin: 10px;
+    display: inline-block;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.photos-gallery #photos-container img:hover {
+    transform: scale(1.05);
+}
