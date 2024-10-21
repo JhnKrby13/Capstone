@@ -31,6 +31,12 @@ if ($_SESSION["role"] === "admin") {
     }
 }   
 
+$booking_id = $_POST['booking_id']; // assuming booking ID is passed from the form or action
+$update_status_query = "UPDATE booking SET status = 'completed' WHERE id = :booking_id";
+$stmt = $pdo->prepare($update_status_query);
+$stmt->bindParam(':booking_id', $booking_id);
+$stmt->execute();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,14 +56,13 @@ if ($_SESSION["role"] === "admin") {
     <div class="dashboard">
         <div class="sidebar">
             <ul>
-                <li><a href="super_admin_dashboard.php"><i class="fas fa-home"></i> Super Admin Dashboard</a></li>
-                <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
+                <li><a href="super_admin_dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="photographer-dashboard.php"><i class="fas fa-tachometer-alt"></i> Photographer Dashboard</a></li>
-                <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> Manage Bookings</a></li>
-                <li><a href="manage-packages.php"><i class="fas fa-box"></i> Manage Packages</a></li>
-                <li><a href="manage-photographer.php"><i class="fas fa-camera"></i> Manage Photographers</a></li>
-                <li><a href="manage-users.php"><i class="fas fa-users"></i> Manage Clients</a></li>
-                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> Manage Gallery</a></li>
+                <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+                <li><a href="manage-packages.php"><i class="fas fa-box"></i> Packages</a></li>
+                <li><a href="manage-photographer.php"><i class="fas fa-camera"></i> Photographers</a></li>
+                <li><a href="manage-users.php"><i class="fas fa-users"></i> Clients</a></li>
+                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> Gallery</a></li>
                 <li><a href="recent-history.php"><i class="fas fa-history"></i> Recent History</a></li>
                 <li><a href="recycle-bin.php"><i class="fas fa-trash-alt"></i> Archieve</a></li>
                 <li><a href="system-settings.php"><i class="fas fa-cogs"></i> Settings</a></li>
