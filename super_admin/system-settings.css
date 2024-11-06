@@ -35,10 +35,10 @@ body {
 }
 
 .sidebar {
-    width: 250px;
+    width: 230px;
     background-color: whitesmoke;
     padding-top: 20px;
-    height: 138%;
+    height: 180%;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -79,7 +79,7 @@ body {
     padding: 40px;
     background-color: #fff;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 115vh; 
+    height: 165vh; 
 }
 
 .content h1 {
@@ -90,4 +90,26 @@ body {
 
 .dashboard-overview {
     margin-top: 20px;
+}
+
+.card {
+    border: 5px solid #333; /* Darker border */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Drop shadow */
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f8f9fa;
+}
+
+.card h2 {
+    font-size: 24px;
+    color: #333;
+    border-bottom: 2px solid #555; /* Darker line */
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.card p {
+    font-size: 16px;
+    color: #555;
 }

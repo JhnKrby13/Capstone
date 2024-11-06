@@ -101,8 +101,6 @@ $data = fetchData($pdo);
         <img src="image/logo.png" alt="Logo" class="logo">
         <h1>Mhark Photography Super Admin Dashboard</h1>
     </div>
-    <a href="../auth/logout.php">Logout</a>
-
     <div class="dashboard">
         <div class="sidebar">
             <ul>
