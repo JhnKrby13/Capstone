@@ -1,5 +1,5 @@
 <?php
-require '../connection.php'; 
+require '../connection.php';
 
 session_start();
 
@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 switch ($_SESSION["role"]) {
     case "admin":
         break;
-    
+
     case "client":
         redirectUser('../client/packages');
         break;
@@ -21,7 +21,8 @@ switch ($_SESSION["role"]) {
         break;
 }
 
-function redirectUser($defaultLocation) {
+function redirectUser($defaultLocation)
+{
     if (!empty($_SERVER['HTTP_REFERER'])) {
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     } else {
@@ -33,6 +34,7 @@ function redirectUser($defaultLocation) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,12 +43,13 @@ function redirectUser($defaultLocation) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="header">
         <img src="image/logo.png" alt="Logo" class="logo">
         <h1>Mhark Photography Archive</h1>
     </div>
-    
+
     <div class="dashboard">
         <div class="sidebar">
             <ul>
@@ -61,40 +64,45 @@ function redirectUser($defaultLocation) {
                 <li><a href="system-settings.php"><i class="fas fa-cogs"></i> Settings</a></li>
             </ul>
         </div>
-        
+
         <div class="content">
             <h1>Archive</h1>
 
-            <!-- Archive Cards -->
             <div class="row">
-                
+
                 <!-- Archived Bookings Card -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Archived Bookings</h5>
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5><i class="fas fa-calendar-alt"></i> Archived Bookings</h5>
                         </div>
                         <div class="card-body">
-                            <table class="table">
-                                <thead>
+                            <table class="table table-hover">
+                                <thead class="table-light">
                                     <tr>
+                                        <th>ID</th>
                                         <th>Name</th>
                                         <th>Package</th>
                                         <th>Date</th>
                                         <th>Deleted At</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $stmt = $pdo->query("SELECT * FROM bookings_archive");
-                                    $archivedBookings = $stmt->fetchAll();
-                                    foreach ($archivedBookings as $booking): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($booking['name']) ?></td>
-                                        <td><?= htmlspecialchars($booking['package_type']) ?></td>
-                                        <td><?= htmlspecialchars($booking['datetime']) ?></td>
-                                        <td><?= htmlspecialchars($booking['deleted_at']) ?></td>
-                                    </tr>
+                                    foreach ($stmt->fetchAll() as $booking): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($booking['id']) ?></td>
+                                            <td><?= htmlspecialchars($booking['name']) ?></td>
+                                            <td><?= htmlspecialchars($booking['package_type']) ?></td>
+                                            <td><?= htmlspecialchars($booking['datetime']) ?></td>
+                                            <td><span class="badge bg-danger"><?= htmlspecialchars($booking['deleted_at']) ?></span></td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm">Restore</button>
+                                                <button class="btn btn-danger btn-sm">Delete Permanently</button>
+                                            </td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
@@ -103,28 +111,34 @@ function redirectUser($defaultLocation) {
                 </div>
 
                 <!-- Archived Photographers Card -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Archived Photographers</h5>
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-warning text-white">
+                            <h5><i class="fas fa-camera"></i> Archived Photographers</h5>
                         </div>
                         <div class="card-body">
-                            <table class="table">
-                                <thead>
+                            <table class="table table-hover">
+                                <thead class="table-light">
                                     <tr>
+                                        <th>ID</th>
                                         <th>Name</th>
                                         <th>Deleted At</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $stmt = $pdo->query("SELECT * FROM photographers_archive");
-                                    $archivedPhotographers = $stmt->fetchAll();
-                                    foreach ($archivedPhotographers as $photographer): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($photographer['name']) ?></td>
-                                        <td><?= htmlspecialchars($photographer['deleted_at']) ?></td>
-                                    </tr>
+                                    foreach ($stmt->fetchAll() as $photographer): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($photographer['id']) ?></td>
+                                            <td><?= htmlspecialchars($photographer['name']) ?></td>
+                                            <td><span class="badge bg-danger"><?= htmlspecialchars($photographer['deleted_at']) ?></span></td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm">Restore</button>
+                                                <button class="btn btn-danger btn-sm">Delete Permanently</button>
+                                            </td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
@@ -133,28 +147,34 @@ function redirectUser($defaultLocation) {
                 </div>
 
                 <!-- Archived Packages Card -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Archived Packages</h5>
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h5><i class="fas fa-box-open"></i> Archived Packages</h5>
                         </div>
                         <div class="card-body">
-                            <table class="table">
-                                <thead>
+                            <table class="table table-hover">
+                                <thead class="table-light">
                                     <tr>
+                                        <th>ID</th>
                                         <th>Package Name</th>
                                         <th>Deleted At</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $stmt = $pdo->query("SELECT * FROM packages_archive");
-                                    $archivedPackages = $stmt->fetchAll();
-                                    foreach ($archivedPackages as $package): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($package['package_name']) ?></td>
-                                        <td><?= htmlspecialchars($package['deleted_at']) ?></td>
-                                    </tr>
+                                    foreach ($stmt->fetchAll() as $package): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($package['id']) ?></td>
+                                            <td><?= htmlspecialchars($package['package_name']) ?></td>
+                                            <td><span class="badge bg-danger"><?= htmlspecialchars($package['deleted_at']) ?></span></td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm">Restore</button>
+                                                <button class="btn btn-danger btn-sm">Delete Permanently</button>
+                                            </td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
@@ -163,28 +183,34 @@ function redirectUser($defaultLocation) {
                 </div>
 
                 <!-- Archived Clients Card -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Archived Clients</h5>
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-secondary text-white">
+                            <h5><i class="fas fa-user-slash"></i> Archived Clients</h5>
                         </div>
                         <div class="card-body">
-                            <table class="table">
-                                <thead>
+                            <table class="table table-hover">
+                                <thead class="table-light">
                                     <tr>
+                                        <th>ID</th>
                                         <th>Client Name</th>
                                         <th>Deleted At</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $stmt = $pdo->query("SELECT * FROM clients_archive");
-                                    $archivedClients = $stmt->fetchAll();
-                                    foreach ($archivedClients as $client): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($client['name']) ?></td>
-                                        <td><?= htmlspecialchars($client['deleted_at']) ?></td>
-                                    </tr>
+                                    foreach ($stmt->fetchAll() as $client): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($client['id']) ?></td>
+                                            <td><?= htmlspecialchars($client['name']) ?></td>
+                                            <td><span class="badge bg-danger"><?= htmlspecialchars($client['deleted_at']) ?></span></td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm">Restore</button>
+                                                <button class="btn btn-danger btn-sm">Delete Permanently</button>
+                                            </td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
@@ -198,4 +224,5 @@ function redirectUser($defaultLocation) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
