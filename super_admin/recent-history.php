@@ -51,7 +51,7 @@ $bookings = $stmt->fetchAll();
 <body>
     <div class="header">
         <img src="image/logo.png" alt="Logo" class="logo">
-        <h1>Recent History</h1>
+        <h1>Mhark Photography Recent History</h1>
     </div>
     <div class="dashboard">
         <div class="sidebar">

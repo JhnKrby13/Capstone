@@ -69,8 +69,6 @@ function redirectUser($defaultLocation)
             <h1>Archive</h1>
 
             <div class="row">
-
-                <!-- Archived Bookings Card -->
                 <div class="col-lg-6 col-md-12 mb-4">
                     <div class="card shadow-sm">
                         <div class="card-header bg-primary text-white">

@@ -25,7 +25,7 @@ body {
     color: white;
     font-size: 24px;
     margin: 0;
-    margin-right: 757px;
+    margin-right: 1425px;
 }
 
 .dashboard {
@@ -33,7 +33,6 @@ body {
     width: 100%;
     height: calc(100vh - 60px);
 }
-
 
 .sidebar {
     width: 250px;

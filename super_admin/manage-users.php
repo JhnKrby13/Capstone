@@ -86,7 +86,7 @@ $userResult = $userQuery->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <div class="header">
         <img src="image/logo.png" alt="Logo" class="logo">
-        <h1>Mhark Photography Manage Clients</h1>
+        <h1>Mhark Photography Clients</h1>
     </div>
     <div class="dashboard">
         <div class="sidebar">

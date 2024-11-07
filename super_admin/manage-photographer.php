@@ -76,7 +76,7 @@ $photographers = getPhotographers($pdo);
 <body>
     <div class="header">
         <img src="image/logo.png" alt="Logo" class="logo">
-        <h1>Mhark Photography Manage Photographer</h1>
+        <h1>Mhark Photography Photographer</h1>
     </div>
     <div class="dashboard">
         <div class="sidebar">

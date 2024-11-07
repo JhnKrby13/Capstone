@@ -98,7 +98,7 @@ try {
 <body>
     <div class="header">
         <img src="image/logo.png" alt="Logo" class="logo">
-        <h1>Mhark Photography Manage Packages</h1>
+        <h1>Mhark Photography Packages</h1>
     </div>
     <div class="dashboard">
         <div class="sidebar">
