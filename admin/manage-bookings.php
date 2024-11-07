@@ -48,9 +48,9 @@ try {
     <div class="dashboard">
         <div class="sidebar">
             <ul>
-                <li><a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> Photographer Dashboard</a></li>
-                <li><a href="manage_bookings.php"><i class="fas fa-calendar-check"></i> Manage Bookings</a></li>
-                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> Manage Gallery</a></li>
+                <li><a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> Gallery</a></li>
                 <li><a href="recent-history.php"><i class="fas fa-history"></i> Recent History</a></li>
                 <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
             </ul>
