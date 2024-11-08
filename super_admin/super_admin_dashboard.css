@@ -25,7 +25,7 @@ body {
     color: white;
     font-size: 24px;
     margin: 0;
-    margin-right: 1310px;
+    margin-right: 755px;
 }
 
 .dashboard {
@@ -69,6 +69,7 @@ body {
 
 .sidebar ul li a:hover {
     background-color: #495057;
+    color: white;
 }
 
 .content {
