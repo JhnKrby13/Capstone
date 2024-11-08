@@ -18,6 +18,7 @@ body {
     width: 100%;
     top: 0;
     gap: 1em;
+    z-index: 1000;
 }
 
 .header img.logo {
@@ -33,20 +34,22 @@ body {
 
 .dashboard {
     display: flex;
-    flex-direction: row;
     width: 100%;
     height: calc(100vh - 60px);
+    margin-top: 60px; 
 }
 
 .sidebar {
     width: 250px;
     background-color: whitesmoke;
     padding-top: 5px;
-    margin-top: 5.5em;
-    height: 390%;
+    height: 100vh;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     padding-left: 1.5em;
-    /* position: fixed;  */
+    position: fixed;
+    top: 90px; 
+    left: 0;
+    z-index: 900;
 }
 
 .sidebar ul {
@@ -55,7 +58,6 @@ body {
 }
 
 .sidebar ul li {
-    /* padding: 10px 15px; */
     margin: 0;
 }
 
@@ -83,8 +85,9 @@ body {
     padding: 30px;
     background-color: #fff;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 115vh;
-    margin-top: 4.5em;
+    height: 160vh;
+    margin-top: 10px;
+    margin-left: 250px; 
 }
 
 .content h1 {
@@ -121,23 +124,13 @@ th {
     background-color: #f4f4f9;
 }
 
-input[type="text"], input[type="email"], select {
+input[type="text"], input[type="email"], select, input[type="password"] {
     width: 100%;
     padding: 12px;
     margin: 5px 0 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-}
-
-input[type="password"] {
-    width: calc(100% - 40px);
-    padding: 12px;
-    margin: 5px 0 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    box-sizing: border-box;
 }
 
 .password-wrapper {
@@ -158,6 +151,17 @@ input[type="password"] {
     color: #0056b3;
 }
 
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
 input[type="submit"]:hover {
     background-color: #0056b3;
 }
@@ -169,4 +173,39 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        height: auto;
+        box-shadow: none;
+        padding-left: 0;
+        display: none; /* Hidden on smaller screens */
+        top: 60px;
+        z-index: 9;
+    }
+
+    .content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    table, input[type="text"], input[type="email"], select, input[type="password"] {
+        font-size: 14px;
+    }
+
+    /* Optional button to toggle sidebar visibility */
+    .header .toggle-sidebar {
+        display: inline-block;
+        cursor: pointer;
+        color: white;
+        font-size: 18px;
+    }
 }

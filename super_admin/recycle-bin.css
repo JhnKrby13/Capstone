@@ -1,3 +1,4 @@
+/* General Body Styling */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
@@ -5,8 +6,10 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    overflow-x: hidden; /* Prevents horizontal scrolling */
 }
 
+/* Header Styling */
 .header {
     display: flex;
     align-items: center;
@@ -14,10 +17,11 @@ body {
     background-color: #000033;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: fixed; 
+    position: fixed;
     width: 100%;
     top: 0;
     gap: 1em;
+    z-index: 1000;
 }
 
 .header img.logo {
@@ -31,22 +35,25 @@ body {
     margin: 0;
 }
 
+/* Dashboard Layout */
 .dashboard {
     display: flex;
-    flex-direction: row;
     width: 100%;
     height: calc(100vh - 60px);
+    margin-top: 60px; /* Adjust for header height */
 }
 
 .sidebar {
     width: 250px;
     background-color: whitesmoke;
     padding-top: 5px;
-    margin-top: 5.5em;
-    height: 390%;
+    height: 100vh;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     padding-left: 1.5em;
-    /* position: fixed;  */
+    position: fixed;
+    top: 90px; 
+    left: 0;
+    z-index: 900;
 }
 
 .sidebar ul {
@@ -55,7 +62,6 @@ body {
 }
 
 .sidebar ul li {
-    /* padding: 10px 15px; */
     margin: 0;
 }
 
@@ -87,8 +93,9 @@ body {
     padding: 30px;
     background-color: #fff;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 115vh;
-    margin-top: 4.5em;
+    height: calc(100vh - 60px); 
+    margin-top: 10px;
+    margin-left: 250px; 
 }
 
 .content h1 {
@@ -101,6 +108,7 @@ body {
     margin-top: 20px;
 }
 
+/* Archive Container and Card Styling */
 .archive-container {
     display: flex;
     flex-wrap: wrap;
@@ -108,7 +116,7 @@ body {
 }
 
 .archive-card {
-    flex: 1 1 48%; /* Two cards per row */
+    flex: 1 1 48%;
     background-color: #ffffff;
     border: 1px solid #d3d3d3;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -125,18 +133,31 @@ body {
     padding-bottom: 5px;
 }
 
+/* Table Styling */
 .table {
     width: 100%;
     margin-bottom: 0;
     font-size: 14px;
     color: #333;
+    border-collapse: collapse; /* Ensures borders are cleanly joined */
 }
 
 .table thead th {
     background-color: #f8f9fa;
     font-weight: bold;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s;
 }
 
 .table tbody tr:hover {
     background-color: #f1f1f1;
+}
+
+.table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
 }

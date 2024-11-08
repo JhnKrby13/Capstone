@@ -5,6 +5,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    overflow: hidden; 
 }
 
 .header {
@@ -14,10 +15,11 @@ body {
     background-color: #000033;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: fixed; 
+    position: fixed;
     width: 100%;
     top: 0;
     gap: 1em;
+    z-index: 1000;
 }
 
 .header img.logo {
@@ -33,29 +35,32 @@ body {
 
 .dashboard {
     display: flex;
-    flex-direction: row;
     width: 100%;
-    height: calc(100vh - 60px);
+    height: 100vh;
+    margin-top: 60px; 
+    overflow: hidden;
 }
 
 .sidebar {
     width: 250px;
     background-color: whitesmoke;
     padding-top: 5px;
-    margin-top: 5.5em;
-    height: 390%;
+    height: 100vh;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     padding-left: 1.5em;
-    /* position: fixed;  */
+    position: fixed;
+    top: 90px; 
+    left: 0;
+    z-index: 900;
 }
 
 .sidebar ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar ul li {
-    /* padding: 10px 15px; */
     margin: 0;
 }
 
@@ -87,9 +92,9 @@ body {
     padding: 30px;
     background-color: #fff;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    height: 115vh; 
-    margin-top: 4.5em;
+    height: 160vh;
+    margin-top: 10px;
+    margin-left: 250px; 
 }
 
 .content h1 {
@@ -102,7 +107,6 @@ body {
     margin-top: 20px;
 }
 
-/* Additional CSS for Photographer List and Photos */
 .photographers-list {
     margin-top: 20px;
 }
