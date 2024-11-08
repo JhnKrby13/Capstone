@@ -10,10 +10,15 @@ body {
 .header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: start;
     background-color: #000033;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed; 
+    width: 100%;
+    top: 0;
+    gap: 1em;
+    z-index: 1000;
 }
 
 .header img.logo {
@@ -25,21 +30,26 @@ body {
     color: white;
     font-size: 24px;
     margin: 0;
-    margin-right: 950px;
 }
 
 .dashboard {
     display: flex;
     width: 100%;
     height: calc(100vh - 60px);
+    margin-top: 60px; 
 }
 
 .sidebar {
     width: 250px;
     background-color: whitesmoke;
     padding-top: 5px;
-    height: 135%;
+    height: 100vh;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding-left: 1.5em;
+    position: fixed;
+    top: 90px; 
+    left: 0;
+    z-index: 900;
 }
 
 .sidebar ul {
@@ -69,9 +79,15 @@ body {
     background-color: #495057;
     color: white;
 }
+
 .content {
-    padding: 20px;
-    width: 100%;
+    flex: 1;
+    padding: 30px;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    height: 200vh;
+    margin-top: 10px;
+    margin-left: 250px; 
 }
 
 .widgets {
