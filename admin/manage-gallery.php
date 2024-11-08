@@ -72,7 +72,7 @@ $files = array_filter(glob($targetDir . '*'), 'is_file');
 <body>
     <div class="header">
         <img src="image/logo.png" alt="Logo" class="logo">
-        <h1>Manage Gallery</h1>
+        <h1>Gallery</h1>
     </div>
     <div class="dashboard">
         <div class="sidebar">
