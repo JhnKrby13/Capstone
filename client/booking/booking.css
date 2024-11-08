@@ -28,7 +28,7 @@ body {
 
 .header img.logo {
     width: 50px;
-    height: auto;
+    margin-right: 15px;
 }
 
 .header p {
@@ -95,7 +95,7 @@ body {
     padding: 30px;
     background-color: #fff;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 300vh;
+    height: 480vh;
     margin-top: 10px;
     margin-left: 250px; 
 }
