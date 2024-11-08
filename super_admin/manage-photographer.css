@@ -77,13 +77,14 @@ body {
     background-color: #495057;
     color: white;
 }
+
 .content {
     flex: 1;
-    padding: 40px;
+    padding: 30px;
     background-color: #fff;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     height: 120vh;
-    margin-top: 4em;
+    margin-top: 4.5em;
 }
 
 .content h1 {

@@ -84,10 +84,10 @@ body {
 
 .content {
     flex: 1;
-    padding: 20px;
+    padding: 30px;
     background-color: #fff;
     height: 400vh;
-    margin-top: 5.5em;
+    margin-top: 4.5em;
 }
 
 .content h1 {
