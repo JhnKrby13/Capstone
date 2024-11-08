@@ -14,6 +14,8 @@ body {
     background-color: #000033;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* position: fixed; 
+    top: 0; */
 }
 
 .header img.logo {
@@ -25,11 +27,12 @@ body {
     color: white;
     font-size: 24px;
     margin: 0;
-    margin-right: 921px;
+    margin-right: 755px;
 }
 
 .dashboard {
     display: flex;
+    flex-direction: row;
     width: 100%;
     height: calc(100vh - 60px);
 }
@@ -37,8 +40,8 @@ body {
 .sidebar {
     width: 250px;
     background-color: whitesmoke;
-    padding-top: 20px;
-    height: 133%;
+    padding-top: 5px;
+    height: 380%;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -48,7 +51,7 @@ body {
 }
 
 .sidebar ul li {
-    padding: 10px 15px;
+    /* padding: 10px 15px; */
     margin: 0;
 }
 
