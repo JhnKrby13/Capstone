@@ -18,7 +18,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION["role"] !== "admin") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="header">
+    <div class="header">  
         <img src="image/logo.png" alt="Logo" class="logo">
         <h1>Mhark Photography Settings</h1>
     </div>
