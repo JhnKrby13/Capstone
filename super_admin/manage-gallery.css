@@ -10,12 +10,14 @@ body {
 .header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: start;
     background-color: #000033;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    /* position: fixed; 
-    top: 0; */
+    position: fixed; 
+    width: 100%;
+    top: 0;
+    gap: 1em;
 }
 
 .header img.logo {
@@ -27,7 +29,6 @@ body {
     color: white;
     font-size: 24px;
     margin: 0;
-    margin-right: 946px;
 }
 
 .dashboard {
@@ -41,8 +42,10 @@ body {
     width: 250px;
     background-color: whitesmoke;
     padding-top: 5px;
-    height: 380%;
+    margin-top: 5.5em;
+    height: 390%;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    /* position: fixed;  */
 }
 
 .sidebar ul {
@@ -85,6 +88,7 @@ body {
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     height: 115vh; 
+    margin-top: 4em;
 }
 
 .content h1 {
