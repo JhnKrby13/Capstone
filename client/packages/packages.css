@@ -4,17 +4,18 @@ body {
     margin: 0;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
 }
 
+/* Header */
 .header {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: space-between;
     background-color: #000033;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: fixed; 
+    position: fixed;
     width: 100%;
     top: 0;
     gap: 1em;
@@ -38,17 +39,19 @@ body {
     margin: 0;
 }
 
-.profile-dropdown{
+.profile-dropdown {
     display: flex;
+    margin-left: auto;
 }
 
 .dashboard {
     display: flex;
     width: 100%;
     height: calc(100vh - 60px);
-    margin-top: 60px; 
+    margin-top: 60px;
 }
 
+/* Sidebar */
 .sidebar {
     width: 250px;
     background-color: whitesmoke;
@@ -57,7 +60,7 @@ body {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     padding-left: 1.5em;
     position: fixed;
-    top: 90px; 
+    top: 90px;
     left: 0;
     z-index: 900;
 }
@@ -90,14 +93,14 @@ body {
     color: white;
 }
 
+/* Content */
 .content {
     flex: 1;
     padding: 30px;
     background-color: #fff;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 480vh;
     margin-top: 10px;
-    margin-left: 250px; 
+    margin-left: 250px;
 }
 
 .content h1 {
@@ -106,6 +109,7 @@ body {
     margin-top: 0;
 }
 
+/* Packages Section */
 .packages {
     margin-top: 20px;
     display: flex;
@@ -166,3 +170,72 @@ body {
     color: #555;
 }
 
+@media (max-width: 992px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        margin-top: 60px;
+    }
+
+    .dashboard {
+        flex-direction: column;
+        margin-top: 0;
+    }
+
+    .content {
+        margin: 0;
+        margin-top: 10px;
+    }
+
+    .profile-dropdown {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .header p {
+        font-size: 20px;
+    }
+
+    .sidebar {
+        padding-left: 1em;
+    }
+
+    .content h1 {
+        font-size: 24px;
+    }
+
+    .package {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 576px) {
+    .header img.logo {
+        width: 40px;
+    }
+
+    .header p {
+        font-size: 18px;
+    }
+
+    .sidebar ul li a {
+        font-size: 16px;
+    }
+
+    .content h1 {
+        font-size: 22px;
+    }
+
+    .packages {
+        flex-direction: column;
+    }
+
+    .package {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}

@@ -56,7 +56,7 @@ try {
             <p id="mark">Mhark Photography</p>
         </div>
         <div class="profile-dropdown">
-            <h1 style="color:white; font-size: 24px; margin-right: 15px; ">
+            <h1 style="color:white; font-size: 24px; margin-right: 15px;"> 
             <?php
             echo $_SESSION['firstname'].$_SESSION['lastname'];
             ?>
