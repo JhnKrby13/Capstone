@@ -41,7 +41,7 @@ if (isset($_POST['logout'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mhark Photography</title>
+    <title>Photographer</title>
     <link rel="stylesheet" href="photographer.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.css">
@@ -52,13 +52,14 @@ if (isset($_POST['logout'])) {
 <body>
     <div class="header">
         <div class="sub-header">
+            <i class="fas fa-bars hamburger" id="toggleSidebar"></i>
             <img src="../image/logo.png" alt="Logo" class="logo">
             <p id="mark">Mhark Photography</p>
         </div>
         <div class="profile-dropdown">
             <h1 style="color:white; font-size: 24px; margin-right: 15px; ">
             <?php
-            echo $_SESSION['firstname'].$_SESSION['lastname'];
+            echo $_SESSION['firstname'];
             ?>
             </h1>
             <div class="dropdown">
@@ -74,11 +75,10 @@ if (isset($_POST['logout'])) {
     <div class="dashboard">
         <div class="sidebar">
             <ul>
-                <li><a href="../recent-history/"><i class="fas fa-history"></i> Recent History</a></li>
-                <li><a href="../packages/"><i class="fas fa-box"></i> Our Packages</a></li>
-                <li><a href="../booking/"><i class="fas fa-calendar-check"></i> Booking</a></li>
-                <li><a href="./" class="active"><i class="fas fa-camera"></i> Photographer List</a></li>
-                <li><a href="../gallery/"><i class="fas fa-images"></i> Gallery</a></li>
+                <li><a href="../packages/"><i class="fas fa-box"></i> <span>Packages</span></a></li>
+                <li><a href="../booking/"><i class="fas fa-calendar-check"></i> <span>Booking</span></a></li>
+                <li><a href="./" class="active"><i class="fas fa-camera"></i> <span>Photographer List</span></a></li>
+                <li><a href="../gallery/"><i class="fas fa-images"></i> <span>Gallery</span></a></li>
             </ul>
         </div>
         <div class="content">
@@ -110,6 +110,13 @@ if (isset($_POST['logout'])) {
             </table>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-</body>
+   <script>
+        document.querySelector('.hamburger').addEventListener('click', () => {
+            const sidebar = document.querySelector('.sidebar');
+            const content = document.querySelector('.content');
+            sidebar.classList.toggle('collapsed');
+        });
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </html>
