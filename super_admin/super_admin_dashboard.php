@@ -1,5 +1,5 @@
 <?php
-require '../connection.php'; 
+require '../connection.php';
 
 session_start();
 
@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 }
 
 if ($_SESSION["role"] === "admin") {
-    
 } else {
     if ($_SESSION["role"] === "client") {
         if (!empty($_SERVER['HTTP_REFERER'])) {
@@ -19,8 +18,7 @@ if ($_SESSION["role"] === "admin") {
             header('Location: ../client/packages');
             exit();
         }
-        
-    } else if ($_SESSION["role"] === "photographer"){
+    } else if ($_SESSION["role"] === "photographer") {
         if (!empty($_SERVER['HTTP_REFERER'])) {
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit();
@@ -29,9 +27,10 @@ if ($_SESSION["role"] === "admin") {
             exit();
         }
     }
-}   
+}
 
-function fetchData($pdo) {
+function fetchData($pdo)
+{
     $totalBookingsQuery = $pdo->query("SELECT COUNT(*) as total_bookings FROM booking");
     $totalBookings = $totalBookingsQuery->fetch(PDO::FETCH_ASSOC)['total_bookings'];
 
@@ -87,6 +86,7 @@ $data = fetchData($pdo);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -95,7 +95,8 @@ $data = fetchData($pdo);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    </head>
+</head>
+
 <body>
     <div class="header">
         <i class="fas fa-bars hamburger" id="toggleSidebar"></i>
@@ -139,6 +140,23 @@ $data = fetchData($pdo);
                     <p id="total-users"><?php echo $data['totalUsers']; ?></p>
                 </div>
             </div>
+
+            <div class="py-2">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Time Period
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" id="daily-option">Daily</a></li>
+                        <li><a class="dropdown-item" href="#" id="weekly-option">Weekly</a></li>
+                        <li><a class="dropdown-item" href="#" id="monthly-option">Monthly</a></li>
+                        <li><a class="dropdown-item" href="#" id="quarterly-option">Quarterly</a></li>
+                        <li><a class="dropdown-item" href="#" id="yearly-option">Yearly</a></li>
+                        <li><a class="dropdown-item" href="#" id="cumulative-option">Cumulative (Overall)</a></li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="py-2">
                 <div class="chart">
                     <h2>Revenue Trend</h2>
@@ -155,129 +173,171 @@ $data = fetchData($pdo);
                 <div class="chart">
                     <h2>Total Bookings Trend</h2>
                     <canvas id="bookings-chart"></canvas>
-                 </div>
-                 
+                </div>
             </div>
         </div>
     </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-    const totalBookings = <?php echo $data['totalBookings']; ?>;
-    const totalRevenue = <?php echo $data['totalRevenue']; ?>;
-    const revenueData = <?php echo json_encode($data['revenueData']); ?>;
-    const packageData = <?php echo json_encode($data['packageData']); ?>;
-    const totalPackages = <?php echo $data['totalPackages']; ?>;
-    const totalPhotographers = <?php echo $data['totalPhotographers']; ?>;
-    const totalClients = <?php echo $data['totalUsers']; ?>;
-    const bookingData = <?php echo json_encode($data['bookingData']); ?>;
+            const totalBookings = <?php echo $data['totalBookings']; ?>;
+            const totalRevenue = <?php echo $data['totalRevenue']; ?>;
+            const revenueData = <?php echo json_encode($data['revenueData']); ?>;
+            const packageData = <?php echo json_encode($data['packageData']); ?>;
+            const totalPackages = <?php echo $data['totalPackages']; ?>;
+            const totalPhotographers = <?php echo $data['totalPhotographers']; ?>;
+            const totalClients = <?php echo $data['totalUsers']; ?>;
+            const bookingData = <?php echo json_encode($data['bookingData']); ?>;
 
-    document.getElementById('total-bookings').textContent = totalBookings;
-    document.getElementById('total-revenue').textContent = '₱' + totalRevenue.toFixed(2);
-    document.getElementById('total-packages').textContent = totalPackages;
-    document.getElementById('total-photographers').textContent = totalPhotographers;
-    document.getElementById('total-users').textContent = totalClients;
+            document.getElementById('total-bookings').textContent = totalBookings;
+            document.getElementById('total-revenue').textContent = '₱' + totalRevenue.toFixed(2);
+            document.getElementById('total-packages').textContent = totalPackages;
+            document.getElementById('total-photographers').textContent = totalPhotographers;
+            document.getElementById('total-users').textContent = totalClients;
 
-    const ctxRevenue = document.getElementById('revenue-chart').getContext('2d');
-    const revenueChart = new Chart(ctxRevenue, {
-        type: 'line',
-        data: {
-            labels: revenueData.map(item => item.month),
-            datasets: [{
-                label: 'Revenue',
-                data: revenueData.map(item => item.revenue),
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        beginAtZero: true
+            const ctxRevenue = document.getElementById('revenue-chart').getContext('2d');
+            const revenueChart = new Chart(ctxRevenue, {
+                type: 'line',
+                data: {
+                    labels: revenueData.map(item => item.month),
+                    datasets: [{
+                        label: 'Revenue',
+                        data: revenueData.map(item => item.revenue),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    return '₱' + value.toFixed(2);
+                                }
+                            }
+                        }]
                     }
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        callback: function(value) { return '₱' + value.toFixed(2); }
+                }
+            });
+
+            const ctxPackage = document.getElementById('package-chart').getContext('2d');
+            const packageChart = new Chart(ctxPackage, {
+                type: 'bar',
+                data: {
+                    labels: packageData.map(item => item.package_type),
+                    datasets: [{
+                        label: 'Package Distribution',
+                        data: packageData.map(item => item.count),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
                     }
-                }]
+                }
+            });
+
+            const ctxBookings = document.getElementById('bookings-chart').getContext('2d');
+            const bookingsChart = new Chart(ctxBookings, {
+                type: 'line',
+                data: {
+                    labels: bookingData.map(item => item.date),
+                    datasets: [{
+                        label: 'Total Bookings',
+                        data: bookingData.map(item => item.bookings),
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            function updateCharts(timePeriod) {
+                const updatedRevenueData = getFilteredData(revenueData, timePeriod);
+                revenueChart.data.labels = updatedRevenueData.map(item => item.month);
+                revenueChart.data.datasets[0].data = updatedRevenueData.map(item => item.revenue);
+                revenueChart.update();
+
+                const updatedPackageData = getFilteredData(packageData, timePeriod);
+                packageChart.data.labels = updatedPackageData.map(item => item.package_type);
+                packageChart.data.datasets[0].data = updatedPackageData.map(item => item.count);
+                packageChart.update();
+
+                const updatedBookingData = getFilteredData(bookingData, timePeriod);
+                bookingsChart.data.labels = updatedBookingData.map(item => item.date);
+                bookingsChart.data.datasets[0].data = updatedBookingData.map(item => item.bookings);
+                bookingsChart.update();
             }
-        }
-    });
 
-    const ctxPackage = document.getElementById('package-chart').getContext('2d');
-    const packageChart = new Chart(ctxPackage, {
-        type: 'bar',
-        data: {
-            labels: packageData.map(item => item.package_type),
-            datasets: [{
-                label: 'Package Distribution',
-                data: packageData.map(item => item.count),
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+            function getFilteredData(data, timePeriod) {
+
+                return data;
             }
-        }
-    });
 
-    const ctxBookings = document.getElementById('bookings-chart').getContext('2d');
-    const bookingsChart = new Chart(ctxBookings, {
-        type: 'bar',
-        data: {
-            labels: bookingData.map(item => item.month),
-            datasets: [{
-                label: 'Total Bookings',
-                data: bookingData.map(item => item.count),
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-});
+            document.getElementById('daily-option').addEventListener('click', function() {
+                updateCharts('daily');
+            });
+            document.getElementById('weekly-option').addEventListener('click', function() {
+                updateCharts('weekly');
+            });
+            document.getElementById('monthly-option').addEventListener('click', function() {
+                updateCharts('monthly');
+            });
+            document.getElementById('quarterly-option').addEventListener('click', function() {
+                updateCharts('quarterly');
+            });
+            document.getElementById('yearly-option').addEventListener('click', function() {
+                updateCharts('yearly');
+            });
+            document.getElementById('cumulative-option').addEventListener('click', function() {
+                updateCharts('cumulative');
+            });
+        });
 
-document.querySelector('.hamburger').addEventListener('click', () => {
-    const sidebar = document.querySelector('.sidebar');
-    const content = document.querySelector('.content');
-    sidebar.classList.toggle('collapsed');
-});
-
+        document.querySelector('.hamburger').addEventListener('click', () => {
+            const sidebar = document.querySelector('.sidebar');
+            const content = document.querySelector('.content');
+            sidebar.classList.toggle('collapsed');
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
