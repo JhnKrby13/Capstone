@@ -3,13 +3,14 @@ require '../connection.php';
 
 session_start();
 
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+if (isset($_POST['logout'])) {
+    session_unset();
+    session_destroy();
     header('Location: ../../auth/login.php');
     exit;
 }
 
 if ($_SESSION["role"] === "admin") {
-    
 } else {
     if ($_SESSION["role"] === "client") {
         if (!empty($_SERVER['HTTP_REFERER'])) {
@@ -19,8 +20,7 @@ if ($_SESSION["role"] === "admin") {
             header('Location: ../client/packages');
             exit();
         }
-        
-    } else if ($_SESSION["role"] === "photographer"){
+    } else if ($_SESSION["role"] === "photographer") {
         if (!empty($_SERVER['HTTP_REFERER'])) {
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit();
@@ -29,7 +29,7 @@ if ($_SESSION["role"] === "admin") {
             exit();
         }
     }
-}   
+}
 
 try {
     $stmt = $pdo->query("SELECT b.id, b.name, b.package_type, b.datetime, b.venue, b.price, b.payment_mode, p.name AS photographer_name, b.status, b.photographer_id
@@ -43,6 +43,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,9 +56,26 @@ try {
 
 <body>
     <div class="header">
-        <i class="fas fa-bars hamburger" id="toggleSidebar"></i>
-        <img src="image/logo.png" alt="Logo" class="logo">
-        <h1>Mhark Photography Bookings</h1>
+        <div class="sub-header">
+            <i class="fas fa-bars hamburger" id="toggleSidebar"></i>
+            <img src="image/logo.png" alt="Logo" class="logo">
+            <p id="mark">Mhark Photography Bookings</p>
+        </div>
+        <div class="profile-dropdown">
+            <h1 style="color:white; font-size: 24px; margin-right: 15px;">
+                <?php
+                echo $_SESSION['firstname'];
+                ?>
+            </h1>
+            <div class="dropdown">
+                <button class="btn btn-secondary rounded-circle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle "></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <a class="dropdown-item" href="auth/logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="dashboard">
         <div class="sidebar" id="sidebar">
@@ -123,7 +141,10 @@ try {
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
-                data: { id: id, status: status },
+                data: {
+                    id: id,
+                    status: status
+                },
                 success: function(response) {
                     location.reload();
                 },
@@ -149,4 +170,5 @@ try {
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>
