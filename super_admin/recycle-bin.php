@@ -62,7 +62,7 @@ function redirectUser($defaultLocation)
                     <i class="fas fa-user-circle "></i>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <a class="dropdown-item" href="auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a class="dropdown-item" href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </ul>
             </div>
         </div>
