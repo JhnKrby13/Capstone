@@ -42,8 +42,26 @@ try {
 </head>
 <body>
     <div class="header">
-        <img src="image/logo.png" alt="Logo" class="logo">
-        <h1>Bookings</h1>
+        <div class="sub-header">
+            <i class="fas fa-bars hamburger" id="toggleSidebar"></i>
+            <img src="image/logo.png" alt="Logo" class="logo">
+            <p id="mark">Booking</p>
+        </div>
+        <div class="profile-dropdown">
+            <h1 style="color:white; font-size: 24px; margin-right: 15px;">
+                <?php
+                echo $_SESSION['firstname'];
+                ?>
+            </h1>
+            <div class="dropdown">
+                <button class="btn btn-secondary rounded-circle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle "></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <a class="dropdown-item" href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="dashboard">
         <div class="sidebar">
@@ -110,6 +128,13 @@ try {
                 }
             });
         });
-    </script>
+
+        document.querySelector('.hamburger').addEventListener('click', () => {
+                const sidebar = document.querySelector('.sidebar');
+                const content = document.querySelector('.content');
+                sidebar.classList.toggle('collapsed');
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

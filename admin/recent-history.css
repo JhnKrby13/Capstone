@@ -21,15 +21,33 @@ body {
     z-index: 1000;
 }
 
+.sub-header {
+    display: flex;
+    align-items: center;
+}
+
+.profile-dropdown {
+    display: flex;
+    margin-left: auto;
+}
+
 .header img.logo {
     width: 50px;
     height: auto;
+    margin-left: 10px;
 }
 
-.header h1 {
+.header p {
     color: white;
     font-size: 24px;
     margin: 0;
+    margin-left: 5px;
+}
+
+.header .hamburger {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
 }
 
 .dashboard {
@@ -42,14 +60,18 @@ body {
 .sidebar {
     width: 250px;
     background-color: whitesmoke;
-    padding-top: 5px;
     height: 100vh;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    padding-left: 1.5em;
+    padding-left: .5em;
     position: fixed;
     top: 90px; 
     left: 0;
     z-index: 900;
+    transition: width 0.3s ease;
+}
+
+.sidebar.collapsed {
+    width: 60px;
 }
 
 .sidebar ul {
@@ -58,26 +80,47 @@ body {
 }
 
 .sidebar ul li {
-    margin: 0;
+    display: flex; 
+    align-items: center;
+    justify-content: start;
 }
 
 .sidebar ul li a {
     color: black;
     text-decoration: none;
-    font-size: 18px;
-    display: flex;
+    font-size: 16px;
+    display: inline-flex;
     align-items: center;
-    padding: 10px;
-    transition: background-color 0.3s;
+    justify-content: start;
+    padding: 12px 15px;
+    gap: 12px;
+    background-color: transparent;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .sidebar ul li a i {
-    margin-right: 10px;
+    flex-shrink: 0; 
+    font-size: 20px; 
+}
+
+.sidebar ul li a span {
+    display: inline; 
+    transition: opacity 0.3s, margin-left 0.3s;
+}
+
+.sidebar.collapsed ul li a span {
+    opacity: 0;
+    margin-left: -100px; 
 }
 
 .sidebar ul li a:hover {
-    background-color: #495057;
+    background-color: #495057; 
     color: white;
+    width: 100%;
+}
+
+.sidebar.collapsed + .content {
+    margin-left: 60px; 
 }
 
 .content {
@@ -85,9 +128,10 @@ body {
     padding: 30px;
     background-color: #fff;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 200vh;
+    height: 350vh;
     margin-top: 10px;
     margin-left: 250px; 
+    transition: margin-left 0.3s ease;
 }
 
 .super-admin {
