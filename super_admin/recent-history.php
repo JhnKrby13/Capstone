@@ -53,9 +53,26 @@ $bookings = $stmt->fetchAll();
 
 <body>
     <div class="header">
-        <i class="fas fa-bars hamburger" id="toggleSidebar"></i>
-        <img src="image/logo.png" alt="Logo" class="logo">
-        <h1>Mhark Photography Recent History</h1>
+        <div class="sub-header">
+            <i class="fas fa-bars hamburger" id="toggleSidebar"></i>
+            <img src="image/logo.png" alt="Logo" class="logo">
+            <p id="mark">Mhark Photography Recent History</p>
+        </div>
+        <div class="profile-dropdown">
+            <h1 style="color:white; font-size: 24px; margin-right: 15px;">
+                <?php
+                echo $_SESSION['firstname'];
+                ?>
+            </h1>
+            <div class="dropdown">
+                <button class="btn btn-secondary rounded-circle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle "></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <a class="dropdown-item" href="auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="dashboard">
         <div class="sidebar" id="sidebar">

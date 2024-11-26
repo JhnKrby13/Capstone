@@ -59,7 +59,7 @@ try {
         <div class="sub-header">
             <i class="fas fa-bars hamburger" id="toggleSidebar"></i>
             <img src="image/logo.png" alt="Logo" class="logo">
-            <p id="mark">Mhark Photography Bookings</p>
+            <p id="mark">Mhark Photography Booking</p>
         </div>
         <div class="profile-dropdown">
             <h1 style="color:white; font-size: 24px; margin-right: 15px;">
@@ -72,7 +72,7 @@ try {
                     <i class="fas fa-user-circle "></i>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <a class="dropdown-item" href="auth/logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                    <a class="dropdown-item" href="auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </ul>
             </div>
         </div>
