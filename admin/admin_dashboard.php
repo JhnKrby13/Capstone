@@ -17,39 +17,38 @@ if ($_SESSION["role"] !== "photographer") {
     }
 }
 
-if (isset($_POST['logout'])) {
-    session_unset();
-    session_destroy();
-    header('Location: ../../auth/login.php');
-    exit;
-}
+$photographer_id = $_SESSION['user_id'];
 
-$totalBookings = 10;
-$upcomingShoots = 3;
-$unreadMessages = 2;
-$photographerName = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'Photographer';
-$recentActivities = [
-    "Booking #1234 confirmed for Jan 20",
-    "Photo shoot for Client A on Feb 2",
-    "New message from Client B"
-];
-$recentBookings = [
-    ["client" => "Client A", "date" => "2024-11-10", "status" => "Confirmed"],
-    ["client" => "Client B", "date" => "2024-11-12", "status" => "Pending"]
-];
+$totalBookingsQuery = "SELECT COUNT(*) AS total FROM booking WHERE photographer_id = :photographer_id";
+$stmt = $pdo->prepare($totalBookingsQuery);
+$stmt->execute(['photographer_id' => $photographer_id]);
+$totalBookings = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+
+$upcomingShootsQuery = "SELECT COUNT(*) AS upcoming FROM booking WHERE photographer_id = :photographer_id AND datetime >= NOW()";
+$stmt = $pdo->prepare($upcomingShootsQuery);
+$stmt->execute(['photographer_id' => $photographer_id]);
+$upcomingShoots = $stmt->fetch(PDO::FETCH_ASSOC)['upcoming'] ?? 0;
+
+$recentBookingsQuery = "SELECT client_id, datetime, status FROM booking WHERE photographer_id = :photographer_id ORDER BY datetime DESC LIMIT 5";
+$stmt = $pdo->prepare($recentBookingsQuery);
+$stmt->execute(['photographer_id' => $photographer_id]);
+$recentBookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$photographerName = isset($_SESSION['firstname']) ? htmlspecialchars($_SESSION['firstname']) : 'Photographer';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photographer Dashboard</title>
     <link rel="stylesheet" href="admin_dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="header">
         <div class="sub-header">
@@ -59,13 +58,11 @@ $recentBookings = [
         </div>
         <div class="profile-dropdown">
             <h1 style="color:white; font-size: 24px; margin-right: 15px;">
-                <?php
-                echo $_SESSION['firstname'];
-                ?>
+                <?php echo $photographerName; ?>
             </h1>
             <div class="dropdown">
                 <button class="btn btn-secondary rounded-circle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-user-circle "></i>
+                    <i class="fas fa-user-circle"></i>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <a class="dropdown-item" href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -73,56 +70,45 @@ $recentBookings = [
             </div>
         </div>
     </div>
-
     <div class="dashboard d-flex">
-        <div class="sidebar photographer-sidebar">
+        <div class="sidebar">
             <ul>
-                <li><a href="photographer_dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> Bookings</a></li>
-                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> Gallery</a></li>
-                <li><a href="recent-history.php"><i class="fas fa-history"></i> Recent History</a></li>
-                <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
+                <li><a href="photographer_dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> <span>Gallery</span></a></li>
+                <li><a href="recent-history.php"><i class="fas fa-history"></i> <span>Recent History</span></a></li>
+                <li><a href="reports.php"><i class="fas fa-chart-line"></i> <span>Reports</a></li>
             </ul>
         </div>
 
-        <div class="content photographer-content">
+
+        <div class="content">
             <h1>Welcome, <?php echo $photographerName; ?>!</h1>
 
             <div class="widgets row">
-                <div class="widget col-md-3">
+                <div class="widget col-md-4">
                     <h2>Total Bookings</h2>
                     <p><?php echo $totalBookings; ?></p>
                 </div>
-                <div class="widget col-md-3">
+                <div class="widget col-md-4">
                     <h2>Upcoming Shoots</h2>
                     <p><?php echo $upcomingShoots; ?></p>
                 </div>
-                <div class="widget col-md-3">
+                <div class="widget col-md-4">
                     <h2>Unread Messages</h2>
-                    <p><?php echo $unreadMessages; ?></p>
+                    <p>0</p>
                 </div>
             </div>
-
             <div class="charts row mt-4">
                 <div class="chart-container col-md-6">
                     <h2>Monthly Bookings</h2>
-                    <canvas id="bookingsChart"></canvas>
+                    <div id="bookingsChart"></div>
                 </div>
                 <div class="chart-container col-md-6">
                     <h2>Earnings Overview</h2>
-                    <canvas id="earningsChart"></canvas>
+                    <div id="earningsChart"></div>
                 </div>
             </div>
-
-            <div class="activity-feed mt-4">
-                <h2>Recent Activity</h2>
-                <ul>
-                    <?php foreach ($recentActivities as $activity): ?>
-                        <li><?php echo htmlspecialchars($activity); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-
             <div class="bookings-list mt-4">
                 <h2>Recent Bookings</h2>
                 <table class="table table-striped">
@@ -136,66 +122,57 @@ $recentBookings = [
                     <tbody>
                         <?php foreach ($recentBookings as $booking): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($booking['client']); ?></td>
-                                <td><?php echo htmlspecialchars($booking['date']); ?></td>
+                                <td><?php echo htmlspecialchars($booking['client_id']); ?></td>
+                                <td><?php echo htmlspecialchars($booking['datetime']); ?></td>
                                 <td><?php echo htmlspecialchars($booking['status']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-
-            <div class="gallery-overview mt-4">
-                <h2>Gallery Overview</h2>
-                <div class="gallery">
-                    <a href="image/sample1.jpg" data-lightbox="gallery"><img src="image/sample1.jpg" alt="Sample Photo"></a>
-                    <a href="image/sample2.jpg" data-lightbox="gallery"><img src="image/sample2.jpg" alt="Sample Photo"></a>
-                    <a href="image/sample3.jpg" data-lightbox="gallery"><img src="image/sample3.jpg" alt="Sample Photo"></a>
-                    <a href="image/sample4.jpg" data-lightbox="gallery"><img src="image/sample4.jpg" alt="Sample Photo"></a>
-                </div>
-            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
-        const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
-        new Chart(bookingsCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Bookings',
-                    data: [3, 2, 5, 7, 4, 6, 5, 8, 6, 4, 9, 7],
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
+        var bookingsOptions = {
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            series: [{
+                name: 'Bookings',
+                data: [3, 2, 5, 7, 4, 6, 5, 8, 6, 4, 9, 7]
+            }],
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             }
-        });
+        };
+        var bookingsChart = new ApexCharts(document.querySelector("#bookingsChart"), bookingsOptions);
+        bookingsChart.render();
 
-        const earningsCtx = document.getElementById('earningsChart').getContext('2d');
-        new Chart(earningsCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Earnings',
-                    data: [1200, 1700, 1500, 1900, 1600, 2100, 2000, 2400, 2300, 2200, 2600, 2500],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 2
-                }]
+        var earningsOptions = {
+            chart: {
+                type: 'line',
+                height: 350
+            },
+            series: [{
+                name: 'Earnings',
+                data: [1200, 1700, 1500, 1900, 1600, 2100, 2000, 2400, 2300, 2200, 2600, 2500]
+            }],
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             }
-        });
+        };
+        var earningsChart = new ApexCharts(document.querySelector("#earningsChart"), earningsOptions);
+        earningsChart.render();
 
         document.querySelector('.hamburger').addEventListener('click', () => {
-                const sidebar = document.querySelector('.sidebar');
-                const content = document.querySelector('.content');
-                sidebar.classList.toggle('collapsed');
-            });
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('collapsed');
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>

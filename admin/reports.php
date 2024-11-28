@@ -51,11 +51,11 @@ if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "photographer") {
     <div class="dashboard">
         <div class="sidebar">
             <ul>
-                <li><a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> Bookings</a></li>
-                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> Gallery</a></li>
-                <li><a href="recent-history.php"><i class="fas fa-history"></i> Recent History</a></li>
-                <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
+                <li><a href="admin_dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> <span>Gallery</span></a></li>
+                <li><a href="recent-history.php"><i class="fas fa-history"></i> <span>Recent History</span></a></li>
+                <li><a href="reports.php"><i class="fas fa-chart-line"></i> <span>Reports</span></a></li>
             </ul>
         </div>
         <div class="content">

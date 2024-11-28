@@ -7,24 +7,23 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     exit;
 }
 
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
-    header('Location: ../../auth/login.php');
-    exit;
-}
-
-if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "photographer") {
-    
+if ($_SESSION["role"] === "admin") {
+    $query = "SELECT * FROM booking ORDER BY datetime DESC LIMIT 5"; 
 } else {
-    if (!empty($_SERVER['HTTP_REFERER'])) {
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-        exit();
-    } else {
-        header('Location: ../client/packages');
-        exit();
-    }
+    $photographer_id = $_SESSION['user_id']; 
+    $query = "SELECT * FROM booking WHERE photographer_id = :photographer_id ORDER BY datetime DESC LIMIT 5";
 }
 
+$stmt = $pdo->prepare($query);
+if ($_SESSION["role"] !== "admin") {
+    $stmt->execute(['photographer_id' => $photographer_id]);
+} else {
+    $stmt->execute();
+}
+
+$bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,26 +60,51 @@ if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "photographer") {
     <div class="dashboard">
         <div class="sidebar">
             <ul>
-                <li><a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> Bookings</a></li>
-                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> Gallery</a></li>
-                <li><a href="recent-history.php"><i class="fas fa-history"></i> Recent History</a></li>
-                <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
+                <li><a href="admin_dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="manage-bookings.php"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+                <li><a href="manage-gallery.php"><i class="fas fa-images"></i> <span>Gallery</span></a></li>
+                <li><a href="recent-history.php"><i class="fas fa-history"></i> <span>Recent History</span></a></li>
+                <li><a href="reports.php"><i class="fas fa-chart-line"></i> <span>Reports</span></a></li>
             </ul>
         </div>
         <div class="content">
             <h1>Recent History</h1>
             <div class="dashboard-overview">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Package</th>
+                            <th>Price</th>
+                            <th>Venue</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($bookings as $booking): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($booking['name']) ?></td>
+                                <td><?= htmlspecialchars($booking['package_type']) ?></td>
+                                <td><?= htmlspecialchars($booking['price']) ?></td>
+                                <td><?= htmlspecialchars($booking['venue']) ?></td>
+                                <td><?= htmlspecialchars($booking['datetime']) ?></td>
+                                <td><?= htmlspecialchars($booking['status']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
     <script>
+
     document.querySelector('.hamburger').addEventListener('click', () => {
-                const sidebar = document.querySelector('.sidebar');
-                const content = document.querySelector('.content');
-                sidebar.classList.toggle('collapsed');
-            });
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        const sidebar = document.querySelector('.sidebar');
+        const content = document.querySelector('.content');
+        sidebar.classList.toggle('collapsed');
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-nrmZdZjUu4cL2RhHk8TgdwsM03w1IpoB3IC7jJh18Bss1Pp1b5kpzqq23fZyGStx" crossorigin="anonymous"></script>
 </body>
 </html>
