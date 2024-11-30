@@ -237,7 +237,6 @@ button:hover {
     background-color: #f1f1f1;
 }
 
-/* Adjustments for Mobile Screens */
 @media (max-width: 768px) {
     .sidebar {
         width: 200px;
