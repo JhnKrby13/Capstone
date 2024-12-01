@@ -133,16 +133,37 @@ body {
     margin-left: 250px; 
     transition: margin-left 0.3s ease;
 }
-.super-admin {
-    display: none; 
-}
-
-.content h1 {
-    font-size: 28px;
-    color: #343a40;
-    margin-top: 0;
-}
 
 .dashboard-overview {
     margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.dashboard-overview .card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 48%;
+    padding: 20px;
+    text-align: center;
+}
+
+.dashboard-overview .card h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #343a40;
+}
+
+.dashboard-overview .card p {
+    font-size: 16px;
+    color: #7f8c8d;
+}
+
+.card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Card hover effect */
+}
+
+.super-admin {
+    display: none; 
 }
