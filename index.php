@@ -27,7 +27,9 @@
             <a href="#home">Home</a>
             <a href="#about">About</a>
             <a href="#photographers">Photographers</a>
-            <a href="#services">Services</a>
+            <!-- <a href="#services">Services</a> -->
+            <a href="#contact">Contact</a>
+
         </nav>
         <div class="login-buttons">
             <button onclick="location.href='./auth/login.php'">Log In</button>
@@ -37,46 +39,46 @@
     <section class="home" id="home">
         <div class="circle-container">
             <img src="./landingpage/image/1234.jpg" alt="Profile Picture" class="profile-picture">
-        </div>  
+        </div>
         <div class="content">
             <h3>Mhark Photography</h3>
             <p>Mark's dedication to his craft and commitment to capturing timeless memories has made Mhark Photography a trusted name in the industry.</p>
-            <a href="#services" class="btn">Explore Our Services</a>
+            <a href="#photographers" class="btn">Explore Our Photographers</a>
         </div>
     </section>
+
     <section class="about">
         <h1 class="heading" id="about">About Us:</h1>
-    <div id="carouselExampleIndicators" class="carousel slide">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="./landingpage/image/jennie.JPG" class="d-block w-100" alt="Slide 1">
-    </div>
-    <div class="carousel-item">
-      <img src="./landingpage/image/jiso.jpg" class="d-block w-100" alt="Slide 2">
-    </div>
-    <div class="carousel-item">
-      <img src="./landingpage/image/lisa.jpg" class="d-block w-100" alt="Slide 3">
-    </div>
-    <div class="carousel-item">
-      <img src="./landingpage/image/rose.jpg" class="d-block w-100" alt="Slide 4">
-    </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-
-</div>
+        <div id="carouselExampleIndicators" class="carousel slide">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="./landingpage/image/jennie.JPG" class="d-block w-100" alt="Slide 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="./landingpage/image/jiso.jpg" class="d-block w-100" alt="Slide 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="./landingpage/image/lisa.jpg" class="d-block w-100" alt="Slide 3">
+                </div>
+                <div class="carousel-item">
+                    <img src="./landingpage/image/rose.jpg" class="d-block w-100" alt="Slide 4">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        </div>
     </section>
 
     <section class="photographers">
@@ -121,7 +123,7 @@
         </div>
     </section>
 
-    <section class="services">
+    <!-- <section class="services">
         <h1 class="heading" id="services">Services</h1>
         <div class="pack-heading">
         <h2>Packages</h2>
@@ -165,6 +167,19 @@
     <div id="lightbox" class="lightbox" onclick="closeLightbox()">
         <img id="lightbox-img" src="" alt="Enlarged Experience">
     </div>
+    </section> -->
+
+    <section class="contact" id="contact">
+        <h1 class="heading">Contact</h1>
+        <div class="box-container">
+            <form id="contact-form" class="hidden" method="post">
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+                <input type="email" id="email" name="email" placeholder="Your Email" required>
+                <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+                <div id="success-message" class="success-message">Message sent successfully!</div>
+            </form>
+        </div>
     </section>
 
     <section class="footer">
@@ -195,7 +210,7 @@
                 <a href="#home" class="links"> <i class="fas fa-arrow-right"></i> Home</a>
                 <a href="#about" class="links"> <i class="fas fa-arrow-right"></i> About</a>
                 <a href="#photographers" class="links"> <i class="fas fa-arrow-right"></i> Photographers</a>
-                <a href="#services" class="links"> <i class="fas fa-arrow-right"></i> Services</a>
+                <!-- <a href="#services" class="links"> <i class="fas fa-arrow-right"></i> Services</a> -->
             </div>
         </div>
         <div class="credit">© 2024 Mhark Photography. All Rights Reserved.</div>
