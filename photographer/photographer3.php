@@ -13,12 +13,12 @@
         <h1>Photographer</h1>
         <div class="profile">
             <div class="profile-image">
-                <img src="image/photo1.jpg" alt="Profile Picture">
+                <img src="image/photo3.jpg" alt="Profile Picture">
             </div>
-            <div class="profile-details">s
-                <p><strong>Name:</strong> Mark Anthony Maghanoy</p>
-                <p><strong>Address:</strong> 78A Pnr Comp Purok Bago Masagana Cotta Lucena City</p>
-                <p><strong>Contact:</strong> 09153016400</p>
+            <div class="profile-details">
+                <p><strong>Name:</strong> Lovely Ann Joyce Sotomayor</p>
+                <p><strong>Address:</strong> Baranagay Talim</p>
+                <p><strong>Contact:</strong> 09321654987</p>
                 <h2>About Me</h2>
                 <p>A bio gives your audience an idea of who you are, your education, experience, and your inspiration and/or motivation for being a photographer. A bio should describe your specialties and an overall aesthetic of your work while including a list of current and previous clients.</p>
                 <button onclick="contactMe()" id="contact"><a href="contact.php">Contact Me</a></button>

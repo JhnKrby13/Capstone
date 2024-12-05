@@ -26,7 +26,7 @@
                 <div class="carousel">
                     <button class="carousel-button left" onclick="moveCarousel(-1)">&#10094;</button>
                     <div class="carousel-images">
-                        <img src="image/pic8.jpg" alt="Experience 8"> <!-- Clone of the last image -->
+                        <img src="image/pic8.jpg" alt="Experience 8"> 
                         <img src="image/pic1.jpg" alt="Experience 1">
                         <img src="image/pic2.jpg" alt="Experience 2">
                         <img src="image/pic3.jpg" alt="Experience 3">
@@ -35,7 +35,7 @@
                         <img src="image/pic6.jpg" alt="Experience 6">
                         <img src="image/pic7.jpg" alt="Experience 7">
                         <img src="image/pic8.jpg" alt="Experience 8">
-                        <img src="image/pic1.jpg" alt="Experience 1"> <!-- Clone of the first image -->
+                        <img src="image/pic1.jpg" alt="Experience 1"> 
                     </div>
                     <button class="carousel-button right" onclick="moveCarousel(1)">&#10095;</button>
                     <div class="carousel-indicators">
