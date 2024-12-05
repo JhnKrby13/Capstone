@@ -207,80 +207,120 @@ section{
 
 .about .heading {
     margin: 1.8rem 0;
-    margin-left: -1150px;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    background-color: transparent !important; /* Removes background color */
-    border: 2px solid #fff; 
+/* .custom-btn {
+    background-color: rgba(0, 0, 0, 0.6); 
+    border: none; 
     width: 50px;
     height: 50px;
     border-radius: 50%; 
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds subtle shadow for better visibility */
-    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    color: #fff; 
+    font-size: 20px; 
+    transition: all 0.3s ease; 
+    position: absolute;
+    top: 50%; 
+    transform: translateY(-50%);
+    z-index: 5; 
 }
 
-.carousel-control-prev-icon::after,
-.carousel-control-next-icon::after {
-    content: ''; /* Clears default content */
+.custom-btn:hover {
+    background-color: #007bff; 
+    transform: translateY(-50%) scale(1.1); 
+    color: #fff; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
-.carousel-control-prev-icon {
-    background-image: url('path-to-your-prev-icon.png'); 
-    background-repeat: no-repeat;
-    background-size: 60%; /* Adjust icon size */
-    background-position: center;
+.carousel-control-prev.custom-btn {
+    left: 15px; 
 }
 
-.carousel-control-next-icon {
-    background-image: url('path-to-your-next-icon.png'); 
-    background-repeat: no-repeat;
-    background-size: 60%; /* Adjust icon size */
-    background-position: center;
+.carousel-control-next.custom-btn {
+    right: 15px; 
 }
 
-.carousel-control-prev:hover,
-.carousel-control-next:hover {
-    transform: scale(1.15); /* Slight zoom-in effect */
-    background-color: rgba(255, 255, 255, 0.2); /* Light background glow */
-    border-color: #f8f9fa; /* Highlight border */
-    transition: all 0.3s ease-in-out; 
-    opacity: 1; /* Ensures full opacity */
+.custom-btn i {
+    transition: transform 0.3s ease;
 }
 
-.carousel-item img {
-    height: 500px;
-    object-fit: cover;
-    border-radius: 10px; /* Rounded corners for images */
-    transition: transform 0.3s ease-in-out;
+.custom-btn:hover i {
+    transform: translateX(-5px);
 }
 
-.carousel-item img:hover {
-    transform: scale(1.02); /* Slight zoom-in on hover */
-}
+.carousel-control-next:hover i {
+    transform: translateX(5px);
+} */
 
-.carousel-caption {
-    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
-    padding: 15px;
-    border-radius: 10px;
-    color: #f8f9fa; /* Light text for better contrast */
-    font-family: 'Roboto', sans-serif;
-}
-
-.carousel-caption h5 {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.carousel-caption p {
-    font-size: 1rem;
-    margin-top: 5px;
-    font-style: italic;
-}
+.events .container-fluid {
+    padding: 0;
+  }
+  
+  .events .event-item {
+    background-size: cover;
+    background-position: cente;
+    min-height: 600px;
+    padding: 30px;
+  }
+  
+  @media (max-width: 575px) {
+    .events .event-item {
+      min-height: 500px;
+    }
+  }
+  
+  .events .event-item:before {
+    content: "";
+    background: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    inset: 0;
+  }
+  
+  .events .event-item h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #ffffff;
+    position: relative;
+  }
+  
+  .events .event-item .price {
+    color: #ffffff;
+    border-bottom: 2px solid var(--accent-color);
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    position: relative;
+  }
+  
+  .events .event-item .description {
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, 0.8);
+    position: relative;
+  }
+  
+  .events .swiper-wrapper {
+    height: auto;
+  }
+  
+  .events .swiper-pagination {
+    margin-top: 20px;
+    position: relative;
+  }
+  
+  .events .swiper-pagination .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background-color: color-mix(in srgb, var(--default-color), transparent 85%);
+    opacity: 1;
+  }
+  
+  .events .swiper-pagination .swiper-pagination-bullet-active {
+    background-color: var(--accent-color);
+  }
+  
 
 .photographers {
     text-align: center;
