@@ -1,34 +1,55 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const contactButton = document.getElementById('contact-button');
-    const contactForm = document.getElementById('contact-form');
-    // let search = document.getElementById('search-box');
-    // let search_btn = document.getElementById('search-button');
+document.addEventListener("DOMContentLoaded", function () {
+  const contactButton = document.getElementById("contact-button");
+  const contactForm = document.getElementById("contact-form");
+  // let search = document.getElementById('search-box');
+  // let search_btn = document.getElementById('search-button');
 
-    // contactButton.addEventListener('click', function () {
-    //     contactForm.style.display = 'flex';
-    // });
+  // contactButton.addEventListener('click', function () {
+  //     contactForm.style.display = 'flex';
+  // });
 
-    // let searchForm = document.querySelector('.search-form');
+  // let searchForm = document.querySelector('.search-form');
 
-    console.log('hello')
-    const form = document.querySelector('form');
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
+  console.log("hello");
+  const form = document.querySelector("form");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-        const formData = new FormData(form);
-        const name = formData.get('name');
-        const email = formData.get('email');
-        const message = formData.get('message');
+    const formData = new FormData(form);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const message = formData.get("message");
 
-        // For demonstration purposes, we'll just display a success message
-        // In a real application, you would send this data to a server
-        const successMessage = document.querySelector('.success-message');
-        successMessage.textContent = 'Thank you for getting in touch, ' + name + '! We will get back to you soon.';
+    // For demonstration purposes, we'll just display a success message
+    // In a real application, you would send this data to a server
+    const successMessage = document.querySelector(".success-message");
+    successMessage.textContent =
+      "Thank you for getting in touch, " +
+      name +
+      "! We will get back to you soon.";
 
-        form.reset();
-    });
+    form.reset();
+  });
 });
 
+const carouselElement = document.getElementById('carouselExampleIndicators');
+const carousel = new bootstrap.Carousel(carouselElement, {
+    interval: 2000,
+    pause: false
+});
+
+// Handle Pause and Play
+document.getElementById('carouselPause').addEventListener('click', function() {
+    carousel.pause();
+    this.classList.add('active'); // Highlight Pause Button
+    document.getElementById('carouselPlay').classList.remove('active');
+});
+
+document.getElementById('carouselPlay').addEventListener('click', function() {
+    carousel.cycle();
+    this.classList.add('active'); // Highlight Play Button
+    document.getElementById('carouselPause').classList.remove('active');
+});
 
 //     const swiper = new Swiper('.swiper-container', {
 //         slidesPerView: 1,
@@ -44,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //     });
 // });
 
-// // Carausel 
+// // Carausel
 // document.addEventListener('DOMContentLoaded', function() {
 //     const carouselElement = document.getElementById('carouselExampleIndicators');
 //     const carousel = new bootstrap.Carousel(carouselElement, {
@@ -56,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
 //       carousel.cycle();
 //     });
 // });
-
 
 // Calendar
 // const daysTag = document.querySelector(".days"),
@@ -85,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //     for (let i = 1; i <= lastDateofMonth; i++) { // creating li of all days of current month
 //         // adding active class to li if the current day, month, and year matched
-//         let isToday = i === date.getDate() && currMonth === new Date().getMonth() 
+//         let isToday = i === date.getDate() && currMonth === new Date().getMonth()
 //                      && currYear === new Date().getFullYear() ? "active" : "";
 //         liTag += `<li class="${isToday}">${i}</li>`;
 //     }

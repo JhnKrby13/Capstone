@@ -49,37 +49,60 @@
 
     <section class="about">
         <h1 class="heading" id="about">About Us:</h1>
-        <div id="carouselExampleIndicators" class="carousel slide">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <!-- Indicators -->
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
             </div>
+
+            <!-- Carousel Items -->
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="./landingpage/image/jennie.JPG" class="d-block w-100" alt="Slide 1">
+                    <img src="./landingpage/image/jennie.JPG" class="d-block w-100" alt="Jennie">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Jennie</h5>
+                        <p>Explore the elegance of Jennie with our photography.</p>
+                    </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="./landingpage/image/jiso.jpg" class="d-block w-100" alt="Slide 2">
+                    <img src="./landingpage/image/jiso.jpg" class="d-block w-100" alt="Jisoo">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Jisoo</h5>
+                        <p>Timeless captures that speak for themselves.</p>
+                    </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="./landingpage/image/lisa.jpg" class="d-block w-100" alt="Slide 3">
+                    <img src="./landingpage/image/lisa.jpg" class="d-block w-100" alt="Lisa">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Lisa</h5>
+                        <p>Artistic photography that highlights beauty.</p>
+                    </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="./landingpage/image/rose.jpg" class="d-block w-100" alt="Slide 4">
+                    <img src="./landingpage/image/rose.jpg" class="d-block w-100" alt="Rose">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Rose</h5>
+                        <p>Moments captured, memories cherished.</p>
+                    </div>
                 </div>
             </div>
+
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
+
             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
-        </div>
+
         </div>
     </section>
+
 
     <section class="photographers">
         <h1 class="heading" id="photographers">Photographers:</h1>
