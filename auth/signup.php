@@ -1,13 +1,13 @@
 <?php
 require '../connection.php';
 require '../vendor/autoload.php'; 
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 session_start();
 
 if (isset($_SESSION['user_id'])) {
-
     $user_id = $_SESSION['user_id'];
     $sql = "SELECT role FROM users WHERE id = :id";
     $statement = $pdo->prepare($sql);
@@ -30,7 +30,7 @@ if (isset($_SESSION['user_id'])) {
                 exit;
         }
     } else {
-        header('Location: ../client/packages/'); 
+        header('Location: ../client/packages/');
         exit;
     }
 }
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $error = "Email already exists!";
         } else {
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-            $verification_code = md5(rand()); 
+            $verification_code = md5(rand());
 
             $sql = "INSERT INTO users (firstname, lastname, email, contact, address, password, role, verification_code) 
                     VALUES (:firstname, :lastname, :email, :contact, :address, :password, 'client', :verification_code)";
@@ -81,25 +81,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $mail->isSMTP();
                     $mail->Host = 'smtp.gmail.com'; 
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'haojohnkirby@gmail.com'; 
-                    $mail->Password = 'vvxc rjwe eveb bqbn'; 
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Username = 'your-email@gmail.com'; 
+                    $mail->Password = 'your-app-password'; 
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
                     $mail->Port = 587;
 
-                    $mail->SMTPOptions = array(
-                        'ssl' => array(
+                    $mail->SMTPOptions = [
+                        'ssl' => [
                             'verify_peer' => false,
                             'verify_peer_name' => false,
-                            'allow_self_signed' => true
-                        )
-                    );
+                            'allow_self_signed' => true,
+                        ],
+                    ];
+                    
+                    $mail->SMTPDebug = 2;
+                    $mail->Debugoutput = 'html';
 
-                    $mail->setFrom('haojohnkirby@gmail.com', 'Mhark Photography');
+                    $mail->setFrom('your-email@gmail.com', 'Mhark Photography');
                     $mail->addAddress($email);
 
                     $mail->isHTML(true);
                     $mail->Subject = 'Verify your email address';
-                    $mail->Body    = 'Please click the link to verify your email: <a href="http://localhost/FinalWebsite/auth/verify.php?code=' . $verification_code . '">Verify Email</a>';
+                    $mail->Body = 'Please click the link to verify your email: <a href="http://localhost/FinalWebsite/auth/verify.php?code=' . $verification_code . '">Verify Email</a>';
 
                     $mail->send();
                     $_SESSION['message'] = "Registration successful! Please check your email to verify your account.";
@@ -115,7 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -188,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         </script>
-    </div>
+    </div>  
 </body>
 
 </html>

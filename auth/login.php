@@ -8,7 +8,6 @@ use PHPMailer\PHPMailer\Exception;
 session_start();
 
 if (isset($_SESSION['user_id'])) {
-
   $user_id = $_SESSION['user_id'];
   $sql = "SELECT role FROM users WHERE id = :user_id";
   $statement = $pdo->prepare($sql);
@@ -18,7 +17,6 @@ if (isset($_SESSION['user_id'])) {
 
   if ($user) {
     $role = $user['role'];
-    echo $role;
     switch ($role) {
       case 'admin':
         header('Location: ../super_admin/super_admin_dashboard.php');
@@ -53,71 +51,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($user) {
     if ($user['is_verified'] == 0) {
       $message = "Your account is not verified. Please check your email to verify your account.";
-      $verification_code = $user['verification_code'];
-
-      $mail = new PHPMailer(true);
-
-      try {
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'haojohnkirby@gmail.com';
-        $mail->Password = 'vvxc rjwe eveb bqbn';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
-
-        $mail->SMTPOptions = array(
-          'ssl' => array(
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-          )
-        );
-
-        $mail->setFrom('haojohnkirby@gmail.com', 'Mhark Photography');
-        $mail->addAddress($email);
-
-        $mail->isHTML(true);
-        $mail->Subject = 'Verify your email address';
-        $mail->Body    = 'Please click the link to verify your email: <a href="http://localhost/FinalWebsite/auth/verify.php?code=' . $verification_code . '">Verify Email</a>';
-
-        $mail->send();
-        $message .= " A new verification email has been sent.";
-      } catch (Exception $e) {
-        $message .= " Could not send verification email. Mailer Error: {$mail->ErrorInfo}";
-      }
     } elseif (password_verify($password, $user['password'])) {
       $_SESSION['user_id'] = $user['id'];
       $_SESSION['firstname'] = $user['firstname'];
       $_SESSION['lastname'] = $user['lastname'];
       $_SESSION['email'] = $user['email'];
       $_SESSION['role'] = $user['role'];
-      $_SESSION['message'] = "Welcome, " . $user['firstname'];
 
-      if ($user) {
-        $role = $user['role'];
-
-        switch ($role) {
-          case 'admin':
-            header('Location: ../super_admin/super_admin_dashboard.php');
-            exit;
-          case 'photographer':
-            header('Location: ../admin/admin_dashboard.php');
-            exit;
-          default:
-            header('Location: ../client/packages/');
-            exit;
-        }
-      } else {
-        header('Location: ../client/packages/');
-        exit;
+      $role = $user['role'];
+      switch ($role) {
+        case 'admin':
+          header('Location: ../super_admin/super_admin_dashboard.php');
+          exit;
+        case 'photographer':
+          header('Location: ../admin/admin_dashboard.php');
+          exit;
+        default:
+          header('Location: ../client/packages/');
+          exit;
       }
-      exit;
     } else {
-      $message = "Invalid Credentials";
+      $message = "Invalid Password";
     }
   } else {
-    $message = "Invalid Credentials";
+    $message = "Invalid Email";
   }
 }
 ?>
@@ -130,17 +87,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Log In</title>
   <link rel="stylesheet" href="style/login.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
   <div class="wrapper" id="signIn">
     <form id="loginForm" method="post" action="login.php" autocomplete="off">
       <h2>Login</h2>
-      <?php if ($message) : ?>
-        <div class="popup show alert alert-danger">
-          <?php echo $message; ?>
-        </div>
+      <?php if (!empty($message)) : ?>
+        <script>
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '<?php echo addslashes($message); ?>',
+            customClass: {
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    content: 'custom-swal-content',
+                    confirmButton: 'custom-confirm-button',  
+                    cancelButton: 'custom-cancel-button'   
+                },
+                background: 'rgba(255, 255, 255, 0.15)',
+                showCancelButton: true,  
+                cancelButtonText: 'Cancel',  
+                confirmButtonText: 'Okay'  
+            });
+        </script>
       <?php endif; ?>
       <div class="input-field">
         <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($email); ?>" required>
@@ -164,7 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       </div>
     </form>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
       function togglePasswordVisibility() {
         var passwordField = document.getElementById('password');
