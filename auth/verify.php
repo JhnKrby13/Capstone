@@ -18,13 +18,9 @@ if (isset($_GET['code'])) {
         $statement->bindParam(':verification_code', $verification_code);
 
         if ($statement->execute()) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['firstname'] = $user['firstname'];
-            $_SESSION['lastname'] = $user['lastname'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['message'] = "Your email has been verified. Welcome, " . $user['firstname'] . "!";
+            $_SESSION['message'] = "Your email has been verified. You can now log in.";
             
-            header('Location: ../client/packages/');
+            header('Location: ../auth/login.php');
             exit;
         } else {
             echo "An error occurred during verification.";

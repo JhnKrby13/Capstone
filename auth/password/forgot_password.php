@@ -1,32 +1,27 @@
 <?php
-require '../../vendor/autoload.php'; // Ensure PHPMailer is autoloaded
+require '../../vendor/autoload.php';
 require '../../connection.php';
 session_start();
 
-// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = htmlspecialchars($_POST['email']);
-    $token = bin2hex(random_bytes(50)); // Generate a unique token
+    $token = bin2hex(random_bytes(50)); 
 
-    // Prepare and execute statement to check if the email exists
     $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
     $stmt->execute([$email]);
 
     if ($stmt->rowCount() > 0) {
-        // Store the token and expiry in the database
         $stmt = $pdo->prepare("UPDATE users SET reset_token = ?, reset_expires = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE email = ?");
         $stmt->execute([$token, $email]);
 
-        // Create a reset link
         $reset_link = "http://localhost/FinalWebsite/auth/password/reset_password.php?token=" . $token;
 
-        // Send email using PHPMailer
         $mail = new PHPMailer\PHPMailer\PHPMailer();
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
+        $mail->Host = 'smtp.gmail.com'; 
         $mail->SMTPAuth = true;
-        $mail->Username = 'haojohnkirby@gmail.com'; // SMTP username
-        $mail->Password = 'vvxc rjwe eveb bqbn'; // SMTP password
+        $mail->Username = 'haojohnkirby@gmail.com'; 
+        $mail->Password = 'hlrm fbtd xftt fkmb'; 
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
 
@@ -38,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             )
         );
 
-
         $mail->setFrom('haojohnkirby@gmail.com', 'Mhark Photography');
         $mail->addAddress($email);
         $mail->Subject = 'Password Reset Request';
@@ -46,12 +40,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->isHTML(true);
 
         if ($mail->send()) {
-            echo "A password reset link has been sent to your email.";
+            header("Location: forgot_password.php?success=true");
+            exit();
         } else {
-            echo "Failed to send the password reset link.";
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to send the password reset link.'
+                });
+            </script>";
         }
     } else {
-        echo "No user found with that email address.";
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No user found with that email address.'
+            });
+        </script>";
     }
 }
 ?>
@@ -64,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
     <link rel="stylesheet" href="forgot_password.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -77,6 +85,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Reset Password</button>
         </form>
     </div>
+
+    <?php if (isset($_GET['success']) && $_GET['success'] == 'true'): ?>
+        <script>
+            Swal.fire({
+                title: 'Password Reset Link Sent!',
+                text: 'Please check your email to reset your password.',
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    content: 'custom-swal-content',
+                    confirmButton: 'custom-confirm-button',
+                },
+                background: 'rgba(255, 255, 255, 0.15)',
+                showConfirmButton: true,
+                confirmButtonText: 'Okay',
+                timer: 10000
+            });
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>
