@@ -37,6 +37,7 @@ if (isset($_SESSION['user_id'])) {
 
 $firstname = $lastname = $email = $contact = $address = '';
 $error = '';
+$successMessage = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $firstname = htmlspecialchars($_POST['firstname']);
@@ -82,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $mail->Host = 'smtp.gmail.com';
                     $mail->SMTPAuth = true;
                     $mail->Username = 'haojohnkirby@gmail.com';
-                    $mail->Password = 'hlrm fbtd xftt fkmb';  
+                    $mail->Password = 'hlrm fbtd xftt fkmb';
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port = 587;
 
@@ -105,8 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $mail->Body = 'Please click the link to verify your email: <a href="http://localhost/FinalWebsite/auth/verify.php?code=' . $verification_code . '">Verify Email</a>';
 
                     $mail->send();
-                    $_SESSION['message'] = "Registration successful! Please check your email to verify your account.";
-                    header('Location: login.php');
+
+                    $successMessage = "Please check your email to verify your account.";
+                    header('Location: signup.php?success=true');
                     exit;
                 } catch (Exception $e) {
                     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
@@ -129,15 +131,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="style/signup.css">
     <link rel="stylesheet" href="style/form-popup.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
+
     <div class="wrapper">
         <form action="signup.php" method="post" autocomplete="off">
             <h2>Sign Up</h2>
-            <?php if ($error) {
-                echo "<div class='alert alert-danger'>$error</div>";
-            } ?>
+
+            <?php if ($error): ?>
+                <div class="alert alert-danger"><?php echo $error; ?></div>
+            <?php endif; ?>
+
+            <?php if ($successMessage): ?>
+                <div class="alert alert-success"><?php echo $successMessage; ?></div>
+            <?php endif; ?>
+
             <div class="input-field">
                 <input type="text" id="fname" name="firstname" value="<?php echo htmlspecialchars($firstname); ?>" required>
                 <label for="fname">First Name</label>
@@ -171,26 +181,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="button-container">
                 <button type="submit">Sign Up</button>
                 <button type="button" onclick="window.location.href='login.php'">Cancel</button>
-
             </div>
         </form>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-        <script>
-            function togglePasswordVisibility(fieldId) {
-                var passwordField = document.getElementById(fieldId);
-                var toggleBtn = document.getElementById('toggle_' + fieldId);
-
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                    toggleBtn.style.backgroundImage = 'url("https://img.icons8.com/material-outlined/24/visible.png")';
-                } else {
-                    passwordField.type = 'password';
-                    toggleBtn.style.backgroundImage = 'url("https://img.icons8.com/material-outlined/24/invisible.png")';
-                }
-            }
-        </script>
     </div>
+
+    <script>
+        function togglePasswordVisibility(fieldId) {
+            var passwordField = document.getElementById(fieldId);
+            var toggleBtn = document.getElementById('toggle_' + fieldId);
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleBtn.style.backgroundImage = 'url("https://img.icons8.com/material-outlined/24/visible.png")';
+            } else {
+                passwordField.type = 'password';
+                toggleBtn.style.backgroundImage = 'url("https://img.icons8.com/material-outlined/24/invisible.png")';
+            }
+        }
+
+        <?php if (isset($_GET['success']) && $_GET['success'] == 'true'): ?>
+            Swal.fire({
+                title: 'Registration successful!',
+                text: '"Please check your email to verify your account."', 
+                // icon: 'success',
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    content: 'custom-swal-content',
+                    confirmButton: 'custom-confirm-button', 
+                },
+                background: 'rgba(255, 255, 255, 0.15)',
+                showConfirmButton: true,
+                confirmButtonText: 'Okay',
+                timer: 10000
+            });
+
+        <?php elseif ($error == "Email already exists!"): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '<?php echo addslashes($error); ?>',
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    content: 'custom-swal-content',
+                    confirmButton: 'custom-confirm-button',
+                    timer: 1500
+                },
+                background: 'rgba(255, 255, 255, 0.15)',
+                sshowConfirmButton: false,
+                confirmButtonText: 'Okay'
+            });
+        <?php endif; ?>
+    </script>
 </body>
 
 </html>

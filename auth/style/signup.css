@@ -178,3 +178,31 @@ button:hover {
   background: url('https://img.icons8.com/material-outlined/24/invisible.png') no-repeat center;
   filter: invert(1) brightness(10); 
 }
+
+.custom-swal-popup {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border: none !important;
+    backdrop-filter: blur(10px);
+    box-shadow: none !important;
+    color: #fff;
+}
+
+.custom-swal-title {
+    color: #fff !important;
+}
+
+.custom-swal-content {
+    color: #fff !important;
+}
+
+.custom-confirm-button {
+    background-color: #6c757d !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: bold;
+    box-shadow: none !important;
+}
+
+.custom-confirm-button:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
