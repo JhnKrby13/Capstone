@@ -1,6 +1,6 @@
 <?php
 require '../connection.php';
-require '../vendor/autoload.php'; 
+require '../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -79,25 +79,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 try {
                     $mail->isSMTP();
-                    $mail->Host = 'smtp.gmail.com'; 
+                    $mail->Host = 'smtp.gmail.com';
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'your-email@gmail.com'; 
-                    $mail->Password = 'your-app-password'; 
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
+                    $mail->Username = 'haojohnkirby@gmail.com';
+                    $mail->Password = 'hlrm fbtd xftt fkmb';  
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port = 587;
 
-                    $mail->SMTPOptions = [
-                        'ssl' => [
+                    $mail->SMTPOptions = array(
+                        'ssl' => array(
                             'verify_peer' => false,
                             'verify_peer_name' => false,
                             'allow_self_signed' => true,
-                        ],
-                    ];
-                    
+                        ),
+                    );
+
                     $mail->SMTPDebug = 2;
                     $mail->Debugoutput = 'html';
 
-                    $mail->setFrom('your-email@gmail.com', 'Mhark Photography');
+                    $mail->setFrom('haojohnkirby@gmail.com', 'Mhark Photography');
                     $mail->addAddress($email);
 
                     $mail->isHTML(true);
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     header('Location: login.php');
                     exit;
                 } catch (Exception $e) {
-                    $error = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                 }
             } else {
                 $error = "An error occurred during registration!";
@@ -190,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         </script>
-    </div>  
+    </div>
 </body>
 
 </html>
