@@ -30,7 +30,11 @@ function redirectUser($defaultLocation)
     }
     exit();
 }
+
+$stmt = $pdo->query("SELECT * FROM bookings_archive");
+$archivedBookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

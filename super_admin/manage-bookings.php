@@ -31,6 +31,9 @@ if ($_SESSION["role"] === "admin") {
     }
 }
 
+$stmt = $pdo->query("SELECT * FROM booking");
+$bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 try {
     $stmt = $pdo->query("SELECT b.id, b.name, b.package_type, b.datetime, b.venue, b.price, b.payment_mode, p.name AS photographer_name, b.status, b.photographer_id
                          FROM booking b 
@@ -39,6 +42,7 @@ try {
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
+
 ?>
 
 <!DOCTYPE html>
