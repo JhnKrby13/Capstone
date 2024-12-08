@@ -2,23 +2,23 @@
 require '../../connection.php';
 session_start();
 
+// Check if user is logged in
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     header('Location: ../../auth/login.php');
     exit;
 }
 
-if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "client") {
-} else {
+// Role-based redirection
+if ($_SESSION["role"] !== "admin" && $_SESSION["role"] !== "client") {
     if (!empty($_SERVER['HTTP_REFERER'])) {
         header('Location: ' . $_SERVER['HTTP_REFERER']);
-        exit();
     } else {
         header('Location: ../../admin/admin_dashboard.php');
-        exit();
     }
+    exit;
 }
 
-
+// Process booking form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['logout'])) {
     try {
         $name = htmlspecialchars($_POST['name']);
@@ -43,8 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['logout'])) {
         $stmt->execute([$name, $address, json_encode($package_types), $venue, $datetime, $price, $payment_mode, $client_id]);
         $booking_id = $pdo->lastInsertId();
 
-        $pdo->commit();
+        // Link photographers to the booking
+        $stmt = $pdo->prepare("INSERT INTO booking_photographers (booking_id, photographer_id) VALUES (?, ?)");
+        foreach ($photographer_ids as $photographer_id) {
+            $stmt->execute([$booking_id, $photographer_id]);
+        }
 
+        $pdo->commit();
         echo json_encode(['success' => true]);
         exit;
     } catch (PDOException $e) {
@@ -78,6 +83,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $photographers[] = $row;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -142,19 +148,19 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <div class="form-group">
                     <label for="package_type">Package Type:</label>
                     <div id="package_type_dropdown" class="dropdown">
-                        
+
                         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             Select Packages
                         </button>
 
                         <div class="dropdown-menu p-3 shadow-lg" aria-labelledby="dropdownMenuButton" style="max-height: 300px; width: 100%; overflow-y: auto; border-radius: 10px; border: 1px solid #ddd;">
-                           
+
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="select_all_packages">
                                 <label class="form-check-label" for="select_all_packages">Select All Packages</label>
                             </div>
                             <hr>
-                            
+
                             <?php foreach ($package_prices as $type => $pkg_price): ?>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="package_type[]" value="<?php echo htmlspecialchars($type); ?>" id="package_<?php echo htmlspecialchars($type); ?>" data-price="<?php echo htmlspecialchars($pkg_price); ?>">
@@ -190,17 +196,25 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
                 <div class="form-group">
                     <label for="photographer_id">Photographers:</label>
-                    <div id="photographer_id">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="select_all_photographers">
-                            <label class="form-check-label" for="select_all_photographers">Select All Photographers</label>
-                        </div>
-                        <?php foreach ($photographers as $photographer): ?>
+                    <div id="photographer_dropdown" class="dropdown">
+                        
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownPhotographersButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Photographers
+                        </button>
+
+                        <div class="dropdown-menu p-3 shadow-lg" aria-labelledby="dropdownPhotographersButton" style="max-height: 300px; width: 300%; overflow-y: auto; border-radius: 10px; border: 1px solid #ddd;">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="photographer_id[]" value="<?php echo htmlspecialchars($photographer['id']); ?>" id="photographer_<?php echo htmlspecialchars($photographer['id']); ?>">
-                                <label class="form-check-label" for="photographer_<?php echo htmlspecialchars($photographer['id']); ?>"><?php echo htmlspecialchars($photographer['name']); ?></label>
+                                <input class="form-check-input" type="checkbox" id="select_all_photographers">
+                                <label class="form-check-label" for="select_all_photographers">Select All Photographers</label>
                             </div>
-                        <?php endforeach; ?>
+                            <hr>
+                            <?php foreach ($photographers as $photographer): ?>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="photographer_id[]" value="<?php echo htmlspecialchars($photographer['id']); ?>" id="photographer_<?php echo htmlspecialchars($photographer['id']); ?>">
+                                    <label class="form-check-label" for="photographer_<?php echo htmlspecialchars($photographer['id']); ?>"><?php echo htmlspecialchars($photographer['name']); ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
 

@@ -233,6 +233,30 @@ input[type="radio"] {
     border-top: 1px solid #ddd;
 }
 
+.form-check-label {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-check-label span {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-check-label small {
+    font-size: 12px;
+    color: #777;
+}
+
+.dropdown-menu {
+    background-color: #fff;
+}
+
+.dropdown-menu .form-check {
+    margin-bottom: 15px;
+}
+
 input[type="submit"] {
     background-color: #007bff;
     color: #fff;
