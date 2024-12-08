@@ -18,7 +18,6 @@ if ($_SESSION["role"] !== "admin" && $_SESSION["role"] !== "client") {
     exit;
 }
 
-// Process booking form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['logout'])) {
     try {
         $name = htmlspecialchars($_POST['name']);
@@ -42,13 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['logout'])) {
         $stmt = $pdo->prepare("INSERT INTO booking (name, address, package_type, venue, datetime, price, payment_mode, client_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$name, $address, json_encode($package_types), $venue, $datetime, $price, $payment_mode, $client_id]);
         $booking_id = $pdo->lastInsertId();
-
-        // Link photographers to the booking
-        $stmt = $pdo->prepare("INSERT INTO booking_photographers (booking_id, photographer_id) VALUES (?, ?)");
-        foreach ($photographer_ids as $photographer_id) {
-            $stmt->execute([$booking_id, $photographer_id]);
-        }
-
+        
         $pdo->commit();
         echo json_encode(['success' => true]);
         exit;
@@ -197,7 +190,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <div class="form-group">
                     <label for="photographer_id">Photographers:</label>
                     <div id="photographer_dropdown" class="dropdown">
-                        
+
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownPhotographersButton" data-bs-toggle="dropdown" aria-expanded="false">
                             Select Photographers
                         </button>
