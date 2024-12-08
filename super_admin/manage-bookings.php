@@ -50,8 +50,8 @@ try {
     <title>Manage Bookings</title>
     <link rel="stylesheet" href="manage-bookings.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -63,9 +63,7 @@ try {
         </div>
         <div class="profile-dropdown">
             <h1 style="color:white; font-size: 24px; margin-right: 15px;">
-                <?php
-                echo $_SESSION['firstname'];
-                ?>
+                <?php echo $_SESSION['firstname']; ?>
             </h1>
             <div class="dropdown">
                 <button class="btn btn-secondary rounded-circle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -124,8 +122,8 @@ try {
                                 <div class="action-buttons">
                                     <button class="accept" onclick="updateStatus(<?php echo $booking['id']; ?>, 'Accepted')">Accept</button>
                                     <button class="decline" onclick="updateStatus(<?php echo $booking['id']; ?>, 'Declined')">Decline</button>
-                                    <button class="edit">Edit</button>
-                                    <button class="delete">Archive</button>
+                                    <button class="edit" onclick="editBooking(<?php echo $booking['id']; ?>)">Edit</button>
+                                    <button class="archive" onclick="archiveBooking(<?php echo $booking['id']; ?>)">Archive</button>
                                 </div>
                             </td>
                         </tr>
@@ -134,41 +132,138 @@ try {
             </table>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        document.querySelector('.hamburger').addEventListener('click', () => {
+            const sidebar = document.querySelector('.sidebar');
+            const content = document.querySelector('.content');
+            sidebar.classList.toggle('collapsed');
+        });
+
         function updateStatus(id, status) {
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: {
-                    id: id,
-                    status: status
-                },
-                success: function(response) {
-                    location.reload();
-                },
-                error: function() {
-                    alert('Failed to update status.');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, proceed!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'update_booking_status.php',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            status: status
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: "Success!",
+                                text: `Booking status updated to ${status}.`,
+                                icon: "success"
+                            });
+                            var row = $('tr').filter(function() {
+                                return $(this).find('td').first().text() == id;
+                            });
+
+                            if (status == 'Accepted') {
+                                row.find('.accept').text('Accepted').prop('disabled', true).addClass('btn-success').removeClass('accept');
+                                row.find('.decline').prop('disabled', true).addClass('btn-secondary').removeClass('decline');
+                            } else if (status == 'Declined') {
+                                row.find('.decline').text('Declined').prop('disabled', true).addClass('btn-danger').removeClass('decline');
+                                row.find('.accept').prop('disabled', true).addClass('btn-secondary').removeClass('accept');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                title: "Failed",
+                                text: "Failed to update status.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function archiveBooking(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action will archive the booking.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, archive it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'archive_booking.php',
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: "Archived!",
+                                text: "The booking has been archived.",
+                                icon: "success"
+                            });
+                            location.reload(); 
+                        },
+                        error: function() {
+                            Swal.fire({
+                                title: "Failed",
+                                text: "Failed to archive booking.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function editBooking(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to edit this booking?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, edit it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `edit_booking.php?id=${id}`;
                 }
             });
         }
 
         $(document).ready(function() {
-            $('#bookings-table').DataTable();
+            $('#bookings-table').DataTable({
+                "searching": true,
+                "paging": true,
+                "ordering": true
+            });
 
             $('#search').on('keyup', function() {
                 $('#bookings-table').DataTable().search(this.value).draw();
             });
         });
 
-        document.querySelector('.hamburger').addEventListener('click', () => {
-            const sidebar = document.querySelector('.sidebar');
-            const content = document.querySelector('.content');
-            sidebar.classList.toggle('collapsed');
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                $('#bookings-table').DataTable().search(this.value).draw();
+            });
         });
+        
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

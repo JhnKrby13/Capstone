@@ -229,3 +229,28 @@ td .action-buttons {
 .action-buttons .decline:hover {
     background-color: #c82333;
 }
+
+.accept, .decline {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.accept:disabled {
+    background-color: #28a745; /* Green for accepted */
+    color: white;
+}
+
+.decline:disabled {
+    background-color: #dc3545; /* Red for declined */
+    color: white;
+}
+
+.accept, .decline {
+    background-color: #ffc107; /* Yellow for default state */
+    color: white;
+}
+
+.accept:disabled, .decline:disabled {
+    cursor: not-allowed;
+}

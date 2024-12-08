@@ -125,7 +125,6 @@ function redirectUser($defaultLocation)
                     </div>
                 </div>
 
-                <!-- Archived Photographers Card -->
                 <div class="col-lg-6 col-md-12 mb-4">
                     <div class="card shadow-sm">
                         <div class="card-header bg-warning text-white">
