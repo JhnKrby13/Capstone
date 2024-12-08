@@ -1,4 +1,4 @@
-<?php 
+<?php
 require '../../connection.php';
 session_start();
 
@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 }
 
 if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "client") {
-    
 } else {
     if (!empty($_SERVER['HTTP_REFERER'])) {
         header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -19,7 +18,8 @@ if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "client") {
     }
 }
 
-function getPhotographers($pdo) {
+function getPhotographers($pdo)
+{
     $sql = "SELECT name, email, contact, address FROM photographers";
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -28,16 +28,17 @@ function getPhotographers($pdo) {
 $photographers = getPhotographers($pdo);
 
 if (isset($_POST['logout'])) {
-    session_unset(); 
-    session_destroy(); 
+    session_unset();
+    session_destroy();
 
     header('Location: ../../auth/login.php');
     exit;
 }
-?> 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,6 +50,7 @@ if (isset($_POST['logout'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 </head>
+
 <body>
     <div class="header">
         <div class="sub-header">
@@ -58,18 +60,18 @@ if (isset($_POST['logout'])) {
         </div>
         <div class="profile-dropdown">
             <h1 style="color:white; font-size: 24px; margin-right: 15px; ">
-            <?php
-            echo $_SESSION['firstname'];
-            ?>
+                <?php
+                echo $_SESSION['firstname'];
+                ?>
             </h1>
             <div class="dropdown">
-  <button class="btn btn-secondary rounded-circle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-  <i class="fas fa-user-circle "></i>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-    <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-  </ul>
-</div>
+                <button class="btn btn-secondary rounded-circle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle "></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="dashboard">
@@ -110,13 +112,13 @@ if (isset($_POST['logout'])) {
             </table>
         </div>
     </div>
-   <script>
+    <script>
         document.querySelector('.hamburger').addEventListener('click', () => {
             const sidebar = document.querySelector('.sidebar');
             const content = document.querySelector('.content');
             sidebar.classList.toggle('collapsed');
         });
-
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </html>
