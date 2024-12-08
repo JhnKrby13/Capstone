@@ -141,17 +141,27 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
                 <div class="form-group">
                     <label for="package_type">Package Type:</label>
-                    <div id="package_type">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="select_all_packages">
-                            <label class="form-check-label" for="select_all_packages">Select All Packages</label>
-                        </div>
-                        <?php foreach ($package_prices as $type => $pkg_price): ?>
+                    <div id="package_type_dropdown" class="dropdown">
+                        
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Packages
+                        </button>
+
+                        <div class="dropdown-menu p-3 shadow-lg" aria-labelledby="dropdownMenuButton" style="max-height: 300px; width: 100%; overflow-y: auto; border-radius: 10px; border: 1px solid #ddd;">
+                           
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="package_type[]" value="<?php echo htmlspecialchars($type); ?>" id="package_<?php echo htmlspecialchars($type); ?>" data-price="<?php echo htmlspecialchars($pkg_price); ?>">
-                                <label class="form-check-label" for="package_<?php echo htmlspecialchars($type); ?>"><?php echo htmlspecialchars($type); ?></label>
+                                <input class="form-check-input" type="checkbox" id="select_all_packages">
+                                <label class="form-check-label" for="select_all_packages">Select All Packages</label>
                             </div>
-                        <?php endforeach; ?>
+                            <hr>
+                            
+                            <?php foreach ($package_prices as $type => $pkg_price): ?>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="package_type[]" value="<?php echo htmlspecialchars($type); ?>" id="package_<?php echo htmlspecialchars($type); ?>" data-price="<?php echo htmlspecialchars($pkg_price); ?>">
+                                    <label class="form-check-label" for="package_<?php echo htmlspecialchars($type); ?>"><?php echo htmlspecialchars($type); ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
 
@@ -205,8 +215,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-
-            document.querySelector('.hamburger').addEventListener('click', () => {
+        document.querySelector('.hamburger').addEventListener('click', () => {
             const sidebar = document.querySelector('.sidebar');
             const content = document.querySelector('.content');
             sidebar.classList.toggle('collapsed');
@@ -321,7 +330,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 }
             }
         };
-
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
