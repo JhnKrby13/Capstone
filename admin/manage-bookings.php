@@ -27,6 +27,34 @@ try {
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
+
+$user_email = $_SESSION['email'];
+$totalBookingsCountQuery = "SELECT id FROM photographers WHERE email = :user_email";
+$stmt = $pdo->prepare($totalBookingsCountQuery);
+$stmt->bindValue(':user_email', $user_email, PDO::PARAM_STR);
+$stmt->execute();
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+$photographer_id = $result['id'] ?? null;
+
+$bookingsDetails = [];
+if ($photographer_id) {
+    $totalBookingsQuery = "
+        SELECT 
+            booking.*, 
+            photographers.name AS photographer_name 
+        FROM 
+            booking
+        JOIN 
+            photographers 
+        ON 
+            booking.photographer_id = photographers.id
+        WHERE 
+            booking.photographer_id = :photographer_id";
+    $stmt = $pdo->prepare($totalBookingsQuery);
+    $stmt->bindValue(':photographer_id', $photographer_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $bookingsDetails = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+}
 ?>
 
 <!DOCTYPE html>
@@ -93,7 +121,7 @@ try {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($bookings as $booking): ?>
+                    <?php foreach ($bookingsDetails as $booking): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($booking['id']); ?></td>
                             <td><?php echo htmlspecialchars($booking['name']); ?></td>

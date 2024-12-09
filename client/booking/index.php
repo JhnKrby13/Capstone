@@ -209,7 +209,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             <hr>
                             <?php foreach ($photographers as $photographer): ?>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="photographer_id[]" value="<?php echo htmlspecialchars($photographer['id']); ?>" id="photographer_<?php echo htmlspecialchars($photographer['id']); ?>">
+                                    <input class="form-check-input" type="checkbox" name="photographer_id" value="<?php echo htmlspecialchars($photographer['id']); ?>" id="photographer_<?php echo htmlspecialchars($photographer['id']); ?>">
                                     <label class="form-check-label" for="photographer_<?php echo htmlspecialchars($photographer['id']); ?>"><?php echo htmlspecialchars($photographer['name']); ?></label>
                                 </div>
                             <?php endforeach; ?>
