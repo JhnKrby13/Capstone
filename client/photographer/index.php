@@ -20,9 +20,27 @@ if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "client") {
 
 function getPhotographers($pdo)
 {
-    $sql = "SELECT name, email, contact, address FROM photographers";
+    $sql = "SELECT photographers.id, photographers.name, photographers.email, photographers.contact, photographers.address, 
+                   booking.datetime AS booking_date 
+            FROM photographers 
+            LEFT JOIN booking ON photographers.id = booking.photographer_id
+            ORDER BY photographers.id, booking.datetime"; // Ordering by photographer ID and booking date
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+$photographers = getPhotographers($pdo);
+$groupedPhotographers = [];
+
+
+foreach ($photographers as $photographer) {
+    $groupedPhotographers[$photographer['id']]['name'] = $photographer['name'];
+    $groupedPhotographers[$photographer['id']]['email'] = $photographer['email'];
+    $groupedPhotographers[$photographer['id']]['contact'] = $photographer['contact'];
+    $groupedPhotographers[$photographer['id']]['address'] = $photographer['address'];
+
+    if ($photographer['booking_date']) {
+        $groupedPhotographers[$photographer['id']]['booking_dates'][] = $photographer['booking_date'];
+    }
 }
 
 $photographers = getPhotographers($pdo);
@@ -34,6 +52,7 @@ if (isset($_POST['logout'])) {
     header('Location: ../../auth/login.php');
     exit;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -92,19 +111,37 @@ if (isset($_POST['logout'])) {
                         <th>Email</th>
                         <th>Contact</th>
                         <th>Address</th>
-                        <th>Book Type</th>
+                        <th>Booking Dates</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($photographers as $photographer): ?>
+                    <?php foreach ($groupedPhotographers as $photographerId => $photographer): ?>
                         <tr>
                             <td><?= htmlspecialchars($photographer['name']) ?></td>
                             <td><?= htmlspecialchars($photographer['email']) ?></td>
                             <td><?= htmlspecialchars($photographer['contact']) ?></td>
                             <td><?= htmlspecialchars($photographer['address']) ?></td>
                             <td>
-                                <button class='btn-book'>Book</button>
-                                <button class='btn-already-book'>Already Booked</button>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton<?= $photographerId ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <?php
+                                        if (isset($photographer['booking_dates']) && !empty($photographer['booking_dates'])) {
+                                            echo "View Bookings";
+                                        } else {
+                                            echo "Not Booked";
+                                        }
+                                        ?>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton<?= $photographerId ?>">
+                                        <?php if (isset($photographer['booking_dates']) && !empty($photographer['booking_dates'])): ?>
+                                            <?php foreach ($photographer['booking_dates'] as $bookingDate): ?>
+                                                <li><a class="dropdown-item" href="#">Booked on: <?= htmlspecialchars($bookingDate) ?></a></li>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <li><a class="dropdown-item" href="#">Not Booked</a></li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

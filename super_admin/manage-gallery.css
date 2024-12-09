@@ -128,7 +128,7 @@ body {
     padding: 30px;
     background-color: #fff;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 350vh;
+    height: 100vh;
     margin-top: 10px;
     margin-left: 250px; 
     transition: margin-left 0.3s ease;
@@ -144,8 +144,10 @@ body {
     margin-top: 20px;
 }
 
+/* Photographer List Styling */
 .photographers-list {
-    margin-top: 20px;
+    margin-top: 30px;
+    padding: 0 15px;
 }
 
 .photographers-list ul {
@@ -154,31 +156,257 @@ body {
 }
 
 .photographers-list ul li {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 .photographers-list ul li a {
-    color: #000033;
+    display: block;
+    padding: 10px;
+    color: #333;
     font-size: 18px;
     text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
 }
 
 .photographers-list ul li a:hover {
-    color: #343a40;
+    color: #ffffff;
+    background-color: #007bff;
 }
 
+/* Photos Gallery Styling */
 .photos-gallery {
-    margin-top: 30px;
+    margin-top: 40px;
+    padding: 0 15px;
+}
+
+.photos-gallery h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.photos-gallery #photos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .photos-gallery #photos-container img {
-    max-width: 150px;
-    margin: 10px;
-    display: inline-block;
+    max-width: 200px;
+    width: 100%;
+    height: auto;
     border-radius: 10px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .photos-gallery #photos-container img:hover {
     transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Folder & Event Styling */
+.event-folder {
+    margin-bottom: 30px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.event-folder h4 {
+    font-size: 22px;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.event-folder img {
+    display: block;
+    margin: 10px 0;
+}
+
+@media (min-width: 768px) {
+    .photos-gallery #photos-container {
+        justify-content: flex-start;
+    }
+
+    .photos-gallery #photos-container img {
+        max-width: 250px;
+    }
+}
+
+.dashboard.popup-active {
+    overflow: hidden;
+}
+
+.photographers-list {
+    padding: 20px;
+    background-color: #f9f9f9;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Photographer list styling */
+.photographers-list h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.photographers-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.photographers-list ul li {
+    margin-bottom: 10px;
+}
+
+.photographers-list ul li a {
+    font-size: 18px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.photographers-list ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Pop-up style for folder management */
+.folder-management-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 9999;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    max-height: 80vh; 
+    overflow-y: auto; 
+    margin-top: 90px;
+}
+
+.folder-management-popup::-webkit-scrollbar {
+    width: 8px;
+}
+
+.folder-management-popup::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.folder-management-popup::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.folder-management-popup .popup-content {
+    position: relative;
+}
+
+.folder-management-popup h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.folder-management-popup h4 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.folder-management-popup .form-container {
+    margin-bottom: 30px;
+}
+
+/* Close button style for the popup */
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.close-popup:hover {
+    color: #d9534f;
+}
+
+/* Labels and inputs */
+.folder-management-popup label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.folder-management-popup input[type="text"],
+.folder-management-popup input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Button styles */
+.folder-management-popup button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.folder-management-popup button:hover {
+    background-color: #45a049;
+}
+
+/* Form button disabled state */
+.folder-management-popup button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .folder-management-popup {
+        padding: 15px;
+    }
+
+    .folder-management-popup h3 {
+        font-size: 20px;
+    }
+
+    .folder-management-popup h4 {
+        font-size: 18px;
+    }
+
+    .folder-management-popup input[type="text"],
+    .folder-management-popup input[type="file"] {
+        font-size: 14px;
+    }
+
+    .folder-management-popup button {
+        font-size: 14px;
+    }
 }
