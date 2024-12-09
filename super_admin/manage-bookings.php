@@ -124,8 +124,8 @@ try {
                             <td><?php echo htmlspecialchars($booking['photographer_name']); ?></td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="accept" onclick="updateStatus(<?php echo $booking['id']; ?>, 'Accepted')">Accept</button>
-                                    <button class="decline" onclick="updateStatus(<?php echo $booking['id']; ?>, 'Declined')">Decline</button>
+                                    <button class="accept" onclick="updateStatus(<?php echo $booking['id']; ?>, 'Accepted')"<?php echo $booking['status'] == 'declined' ? 'disabled' : ''; ?>><?php echo $booking['status'] == 'accepted' ? 'Accepted' : 'Accept'; ?></button>
+                                    <button class="decline" onclick="updateStatus(<?php echo $booking['id'];  ?>, 'Declined')" <?php echo $booking['status'] == 'accepted' ? 'disabled' : ''; ?>><?php echo $booking['status'] == 'declined' ? 'Declined' : 'Decline'; ?></button>
                                     <button class="edit" onclick="editBooking(<?php echo $booking['id']; ?>)">Edit</button>
                                     <button class="archive" onclick="archiveBooking(<?php echo $booking['id']; ?>)">Archive</button>
                                 </div>

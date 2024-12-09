@@ -237,12 +237,12 @@ td .action-buttons {
 }
 
 .accept:disabled {
-    background-color: #28a745; /* Green for accepted */
+    background-color: #7c7c7c; /* Green for accepted */
     color: white;
 }
 
 .decline:disabled {
-    background-color: #dc3545; /* Red for declined */
+    background-color: #7c7c7c; /* Red for declined */
     color: white;
 }
 

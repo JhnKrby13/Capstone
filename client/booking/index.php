@@ -2,13 +2,11 @@
 require '../../connection.php';
 session_start();
 
-// Check if user is logged in
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     header('Location: ../../auth/login.php');
     exit;
 }
 
-// Role-based redirection
 if ($_SESSION["role"] !== "admin" && $_SESSION["role"] !== "client") {
     if (!empty($_SERVER['HTTP_REFERER'])) {
         header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -27,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['logout'])) {
         $venue = htmlspecialchars($_POST['venue']);
         $datetime = htmlspecialchars($_POST['datetime']);
         $payment_mode = htmlspecialchars($_POST['payment_mode']);
-        $photographer_ids = array_map('htmlspecialchars', $_POST['photographer_id'] ?? []);
+        $photographer_id = $_POST['photographer_id'] ?? [];
         $client_id = $_SESSION['user_id'];
 
         $datetime = DateTime::createFromFormat('M d, Y h:i A', $datetime);
@@ -36,26 +34,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['logout'])) {
         }
         $datetime = $datetime->format('Y-m-d H:i:s');
 
+        $placeholders = str_repeat('?,', count($photographer_id) - 1) . '?';
+        $stmt = $pdo->prepare("SELECT id FROM photographers WHERE id IN ($placeholders)");
+        $stmt->execute($photographer_id);
+        $validPhotographers = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        if (count($validPhotographers) !== count($photographer_id)) {
+            throw new Exception("Invalid photographer selected.");
+        }
+
         $pdo->beginTransaction();
 
         $stmt = $pdo->prepare("INSERT INTO booking (name, address, package_type, venue, datetime, price, payment_mode, client_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$name, $address, json_encode($package_types), $venue, $datetime, $price, $payment_mode, $client_id]);
         $booking_id = $pdo->lastInsertId();
-        
+
         $pdo->commit();
         echo json_encode(['success' => true]);
         exit;
     } catch (PDOException $e) {
         $pdo->rollBack();
-        error_log("PDOException: " . $e->getMessage());
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         exit;
     } catch (Exception $e) {
-        error_log("Exception: " . $e->getMessage());
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         exit;
     }
 }
+
 
 if (isset($_POST['logout'])) {
     session_unset();
