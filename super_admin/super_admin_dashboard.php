@@ -71,13 +71,14 @@ function fetchData($pdo)
     ");
     $bookingData = $bookingDataQuery->fetchAll(PDO::FETCH_ASSOC);
 
-    $photographersQuery = $pdo->query("
-        SELECT photographer_name, COUNT(*) as bookings 
-        FROM booking 
-        GROUP BY photographer_name 
-        ORDER BY bookings DESC
-    ");
-    $photographerData = $photographersQuery->fetchAll(PDO::FETCH_ASSOC);
+    $query = "
+        SELECT photographers.name AS photographer_name, COUNT(booking.id) AS bookings
+        FROM booking
+        JOIN photographers ON booking.photographer_id = photographers.id
+        GROUP BY photographers.name
+        ORDER BY bookings DESC";
+    $stmt = $pdo->query($query);
+    $photographerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     return [
         'totalBookings' => $totalBookings,
