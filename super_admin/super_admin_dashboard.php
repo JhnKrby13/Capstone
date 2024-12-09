@@ -71,7 +71,13 @@ function fetchData($pdo)
     ");
     $bookingData = $bookingDataQuery->fetchAll(PDO::FETCH_ASSOC);
 
-
+    $photographersQuery = $pdo->query("
+        SELECT photographer_name, COUNT(*) as bookings 
+        FROM booking 
+        GROUP BY photographer_name 
+        ORDER BY bookings DESC
+    ");
+    $photographerData = $photographersQuery->fetchAll(PDO::FETCH_ASSOC);
 
     return [
         'totalBookings' => $totalBookings,
@@ -84,7 +90,6 @@ function fetchData($pdo)
         'bookingData' => $bookingData
     ];
 }
-
 $data = fetchData($pdo);
 ?>
 
@@ -98,7 +103,6 @@ $data = fetchData($pdo);
     <link rel="stylesheet" href="super_admin_dashboard.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 
@@ -195,9 +199,16 @@ $data = fetchData($pdo);
             <div class="py-2">
                 <div class="chart">
                     <h2>Total Bookings Trend</h2>
-                    <div id="bookings-chart" style="height: 350px;"></div> 
+                    <div id="bookings-chart" style="height: 350px;"></div>
                 </div>
             </div>
+            <div class="py-2">
+                <div class="chart">
+                    <h2>Most Booked Photographer</h2>
+                    <div id="photographer-chart" style="height: 350px;"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -217,9 +228,7 @@ $data = fetchData($pdo);
             document.getElementById('total-packages').textContent = totalPackages;
             document.getElementById('total-photographers').textContent = totalPhotographers;
             document.getElementById('total-users').textContent = totalClients;
-            
 
-            // Revenue Trend Chart
             const revenueChartOptions = {
                 chart: {
                     type: 'line',
@@ -243,7 +252,6 @@ $data = fetchData($pdo);
             const revenueChart = new ApexCharts(document.querySelector("#revenue-chart"), revenueChartOptions);
             revenueChart.render();
 
-            // Package Distribution Chart
             const packageChartOptions = {
                 chart: {
                     type: 'bar',
@@ -260,9 +268,9 @@ $data = fetchData($pdo);
             const packageChart = new ApexCharts(document.querySelector("#package-chart"), packageChartOptions);
             packageChart.render();
 
-                
+
             console.log('Booking Data:', bookingData);
-            
+
 
 
             if (!bookingData || bookingData.length === 0) {
@@ -278,10 +286,10 @@ $data = fetchData($pdo);
                 },
                 series: [{
                     name: 'Total Bookings',
-                    data: bookingData.map(item => item.count), // Use the correct key
+                    data: bookingData.map(item => item.count),
                 }, ],
                 xaxis: {
-                    categories: bookingData.map(item => item.month), // Use the correct key
+                    categories: bookingData.map(item => item.month),
                     title: {
                         text: 'Date'
                     },
@@ -340,6 +348,44 @@ $data = fetchData($pdo);
             function getFilteredData(data, timePeriod) {
                 return data;
             }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                const photographerData = <?php echo json_encode($photographerData); ?>;
+
+                const photographerNames = photographerData.map(item => item.photographer_name);
+                const photographerBookings = photographerData.map(item => item.bookings);
+
+                const photographerChartOptions = {
+                    chart: {
+                        type: 'pie',
+                        height: 350
+                    },
+                    series: photographerBookings,
+                    labels: photographerNames,
+                    title: {
+                        text: 'Most Booked Photographer',
+                        align: 'center'
+                    },
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 300
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
+                };
+
+                const photographerChart = new ApexCharts(
+                    document.querySelector("#photographer-chart"),
+                    photographerChartOptions
+                );
+                photographerChart.render();
+            });
+
 
             document.getElementById('daily-option').addEventListener('click', function() {
                 updateCharts('daily');
