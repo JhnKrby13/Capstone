@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 }
 
 if ($_SESSION["role"] === "admin") {
-    
+    // Admin specific code can go here.
 } else {
     if ($_SESSION["role"] === "client") {
         if (!empty($_SERVER['HTTP_REFERER'])) {
@@ -19,7 +19,6 @@ if ($_SESSION["role"] === "admin") {
             header('Location: ../client/packages');
             exit();
         }
-        
     } else if ($_SESSION["role"] === "photographer"){
         if (!empty($_SERVER['HTTP_REFERER'])) {
             header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -82,7 +81,7 @@ $userResult = $userQuery->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="manage-users.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -108,6 +107,7 @@ $userResult = $userQuery->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
+
     <div class="dashboard">
         <div class="sidebar" id="sidebar">
             <ul>
@@ -122,6 +122,7 @@ $userResult = $userQuery->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="system-settings.php"><i class="fas fa-cogs"></i> <span>Settings</span></a></li>
             </ul>
         </div>
+
         <div class="content">
             <h1>Manage Users</h1>
             <div class="user-form">
@@ -166,12 +167,12 @@ $userResult = $userQuery->fetchAll(PDO::FETCH_ASSOC);
                                     <td><?= htmlspecialchars($row['lastname']); ?></td>
                                     <td><?= htmlspecialchars($row['email']); ?></td>
                                     <td>
-                                        <a href="javascript:void(0)" onclick="editUser(<?= $row['id']; ?>, '<?= htmlspecialchars($row['firstname']); ?>', '<?= htmlspecialchars($row['lastname']); ?>', '<?= htmlspecialchars($row['email']); ?>')">
-                                            <i class="fas fa-edit"></i> Edit
+                                    <a href="javascript:void(0)" class="btn btn-warning btn-sm" onclick="editUser(<?= $row['id']; ?>, '<?= htmlspecialchars($row['firstname']); ?>', '<?= htmlspecialchars($row['lastname']); ?>', '<?= htmlspecialchars($row['email']); ?>')">
+                                        <i class="fas fa-edit"></i> Edit
                                         </a>
-                                        <a href="manage-users.php?delete=<?= $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this user?')">
-                                            <i class="fas fa-trash"></i> Archieve
-                                        </a>
+                                    <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="deleteUser(<?= $row['id']; ?>)">
+                                        <i class="fas fa-trash"></i> Archive
+                                     </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -183,36 +184,55 @@ $userResult = $userQuery->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
-        function editUser(id, firstname, lastname, email) {
-            document.getElementById('user_id').value = id;
-            document.getElementById('firstname').value = firstname;
-            document.getElementById('lastname').value = lastname;
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = '';
+        function editUser(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to edit this booking?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, edit it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `edit-user.php?id=${id}`;
+                }
+            });
+        }
+
+
+        function deleteUser(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You will not be able to undo this action!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, archive it!',
+                cancelButtonText: 'No, cancel!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `manage-users.php?delete=${id}`;
+                }
+            });
         }
 
         function togglePassword() {
             const passwordField = document.getElementById('password');
-            const toggleIcon = document.querySelector('.toggle-password');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
+            const passwordType = passwordField.type === "password" ? "text" : "password";
+            passwordField.type = passwordType;
         }
+
         document.querySelector('.hamburger').addEventListener('click', () => {
             const sidebar = document.querySelector('.sidebar');
             const content = document.querySelector('.content');
             sidebar.classList.toggle('collapsed');
         });
-
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>

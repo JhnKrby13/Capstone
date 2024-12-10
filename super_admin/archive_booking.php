@@ -1,55 +1,53 @@
 <?php
-require '../connection.php';
+require '../connection.php';  // Make sure to include your database connection
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-    $bookingId = intval($_POST['id']); // Sanitize the input
+    $photographerId = intval($_POST['id']);  // Get the photographer ID from the POST request
 
     try {
-        $pdo->beginTransaction(); // Start transaction
+        $pdo->beginTransaction();
 
-        $stmt = $pdo->prepare("SELECT * FROM booking WHERE id = :id");
-        $stmt->execute(['id' => $bookingId]);
-        $booking = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Fetch the photographer details
+        $stmt = $pdo->prepare("SELECT * FROM photographers WHERE id = :id");
+        $stmt->execute(['id' => $photographerId]);
+        $photographer = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($booking) {
-            // Insert into booking_archive table
+        if ($photographer) {
+            // Insert photographer into the photographer_archive table
             $archiveStmt = $pdo->prepare("
-                INSERT INTO booking_archive (id, name, address, package_type, price, venue, datetime, payment_mode, status, photographer_id, client_id)
-                VALUES (:id, :name, :address, :package_type, :price, :venue, :datetime, :payment_mode, :status, :photographer_id, :client_id)
+                INSERT INTO photographer_archive (id, name, email, contact, address)
+                VALUES (:id, :name, :email, :contact, :address)
             ");
             $archiveStmt->execute([
-                'id' => $booking['id'],
-                'name' => $booking['name'],
-                'address' => $booking['address'],
-                'package_type' => $booking['package_type'],
-                'price' => $booking['price'],
-                'venue' => $booking['venue'],
-                'datetime' => $booking['datetime'],
-                'payment_mode' => $booking['payment_mode'],
-                'status' => $booking['status'],
-                'photographer_id' => $booking['photographer_id'],
-                'client_id' => $booking['client_id']
+                'id' => $photographer['id'],
+                'name' => $photographer['name'],
+                'email' => $photographer['email'],
+                'contact' => $photographer['contact'],
+                'address' => $photographer['address']
             ]);
 
-            // Delete the booking from the original table
-            $deleteStmt = $pdo->prepare("DELETE FROM booking WHERE id = :id");
-            $deleteStmt->execute(['id' => $bookingId]);
+            // Delete the photographer from the photographers table
+            $deleteStmt = $pdo->prepare("DELETE FROM photographers WHERE id = :id");
+            $deleteStmt->execute(['id' => $photographerId]);
 
-            $pdo->commit(); // Commit transaction
+            $pdo->commit();
 
-            // Redirect back to manage bookings
-            header('Location: manage-bookings.php?success=1');
+            // Redirect to the manage photographers page with a success flag
+            header('Location: manage-photographers.php?success=1');
             exit;
         } else {
-            $pdo->rollBack(); // Rollback transaction
-            echo "Booking not found.";
+            // Rollback if the photographer is not found
+            $pdo->rollBack();
+            echo "Photographer not found.";
         }
     } catch (Exception $e) {
-        $pdo->rollBack(); // Rollback on error
+        // Rollback in case of error
+        $pdo->rollBack();
         echo "Error: " . $e->getMessage();
     }
 } else {
-    header('Location: manage-bookings.php');
+    // If the request method is not POST or ID is not set, redirect
+    header('Location: manage-photographers.php');
     exit;
 }
 ?>

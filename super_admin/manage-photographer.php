@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 }
 
 if ($_SESSION["role"] === "admin") {
-    
 } else {
     if ($_SESSION["role"] === "client") {
         if (!empty($_SERVER['HTTP_REFERER'])) {
@@ -19,8 +18,7 @@ if ($_SESSION["role"] === "admin") {
             header('Location: ../client/packages');
             exit();
         }
-        
-    } else if ($_SESSION["role"] === "photographer"){
+    } else if ($_SESSION["role"] === "photographer") {
         if (!empty($_SERVER['HTTP_REFERER'])) {
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit();
@@ -29,9 +27,10 @@ if ($_SESSION["role"] === "admin") {
             exit();
         }
     }
-}   
+}
 
-function getPhotographers($pdo) {
+function getPhotographers($pdo)
+{
     $sql = "SELECT id, name, email, contact, address FROM photographers";
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -65,12 +64,14 @@ $photographers = getPhotographers($pdo);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Photographer</title>
     <link rel="stylesheet" href="manage-photographer.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.2/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -126,7 +127,7 @@ $photographers = getPhotographers($pdo);
                 <input type="text" id="address" name="address" required>
                 <input type="submit" value="Add Photographer">
             </form>
-            
+
             <h2>Existing Photographers</h2>
             <table>
                 <thead>
@@ -147,27 +148,88 @@ $photographers = getPhotographers($pdo);
                                 <td><?= htmlspecialchars($photographer['contact']) ?></td>
                                 <td><?= htmlspecialchars($photographer['address']) ?></td>
                                 <td>
-                                    <a href="edit-photographer.php?id=<?= $photographer['id'] ?>">Edit</a>
-                                    <a href="manage-photographer.php?delete=<?= $photographer['id'] ?>" onclick="return confirm('Are you sure you want to delete this photographer?')">Archieve</a>
+                                    <a href="javascript:void(0);" class="btn btn-warning btn-sm" onclick="confirmEdit(<?= $photographer['id'] ?>)">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="javascript:void(0);" onclick="archivePhotographer(<?= $photographer['id'] ?>)" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-archive"></i> Archive
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <tr><td colspan="5">No photographers found</td></tr>
+                        <tr>
+                            <td colspan="5">No photographers found</td>
+                        </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
     <script>
+        function archivePhotographer(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action will archive the photographer.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, archive it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'archive_photographer.php',
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: "Archived!",
+                                text: "The photographer has been archived.",
+                                icon: "success"
+                            });
+                            location.reload();
+                        },
+                        error: function() {
+                            Swal.fire({
+                                title: "Failed",
+                                text: "Failed to archive photographer.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        }
 
-    document.querySelector('.hamburger').addEventListener('click', () => {
+        function confirmEdit(photographerId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to edit this photographer's details?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, edit it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the edit page for the selected photographer
+                    window.location.href = 'edit-photographer.php?id=' + photographerId;
+                }
+            });
+        }
+
+
+        document.querySelector('.hamburger').addEventListener('click', () => {
             const sidebar = document.querySelector('.sidebar');
             const content = document.querySelector('.content');
             sidebar.classList.toggle('collapsed');
         });
-
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>

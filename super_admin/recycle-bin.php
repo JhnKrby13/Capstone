@@ -39,8 +39,14 @@ try {
     echo "Error: " . $e->getMessage();
 }
 
-?>
+try {
+    $stmt = $pdo->query("SELECT * FROM photographer_archive");
+    $archivedPhotographers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -113,7 +119,6 @@ try {
                                     <th>Price</th>
                                     <th>Payment Mode</th>
                                     <th>Status</th>
-                                    <th>Deleted At</th>
                                     <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -155,14 +160,12 @@ try {
                                         <th>Email</th>
                                         <th>Contact</th>
                                         <th>Address</th>
-                                        <th>Deleted At</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $stmt = $pdo->query("SELECT * FROM photographers_archive");
-                                    foreach ($stmt->fetchAll() as $photographer): ?>
+                                    foreach ($archivedPhotographers as $photographers): ?>
                                         <tr>
                                             <td><?= htmlspecialchars($photographer['id']) ?></td>
                                             <td><?= htmlspecialchars($photographer['name']) ?></td>
@@ -182,7 +185,6 @@ try {
                     </div>
                 </div>
 
-                <!-- Archived Packages Card -->
                 <div class="col-lg-6 col-md-12 mb-4">
                     <div class="card shadow-sm">
                         <div class="card-header bg-info text-white">
@@ -193,8 +195,9 @@ try {
                                 <thead class="table-light">
                                     <tr>
                                         <th>ID</th>
-                                        <th>Package Name</th>
-                                        <th>Deleted At</th>
+                                        <th>Name</th>
+                                        <th>Price</th></th>
+                                        <th>Description</th></th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -204,7 +207,9 @@ try {
                                     foreach ($stmt->fetchAll() as $package): ?>
                                         <tr>
                                             <td><?= htmlspecialchars($package['id']) ?></td>
-                                            <td><?= htmlspecialchars($package['package_name']) ?></td>
+                                            <td><?= htmlspecialchars($package['Name']) ?></td>
+                                            <td><?= htmlspecialchars($package['Price']) ?></td>
+                                            <td><?= htmlspecialchars($package['Description']) ?></td>
                                             <td><span class="badge bg-danger"><?= htmlspecialchars($package['deleted_at']) ?></span></td>
                                             <td>
                                                 <button class="btn btn-success btn-sm">Restore</button>
@@ -228,8 +233,11 @@ try {
                                 <thead class="table-light">
                                     <tr>
                                         <th>ID</th>
-                                        <th>Client Name</th>
-                                        <th>Deleted At</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Address</th>
+                                        <th>Email</th>
+                                        <th>Contact</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -239,7 +247,10 @@ try {
                                     foreach ($stmt->fetchAll() as $client): ?>
                                         <tr>
                                             <td><?= htmlspecialchars($client['id']) ?></td>
-                                            <td><?= htmlspecialchars($client['name']) ?></td>
+                                            <td><?= htmlspecialchars($client['firstname']) ?></td>
+                                            <td><?= htmlspecialchars($client['lastname']) ?></td>
+                                            <td><?= htmlspecialchars($client['address']) ?></td>
+                                            <td><?= htmlspecialchars($client['contact']) ?></td>
                                             <td><span class="badge bg-danger"><?= htmlspecialchars($client['deleted_at']) ?></span></td>
                                             <td>
                                                 <button class="btn btn-success btn-sm">Restore</button>
@@ -258,11 +269,11 @@ try {
     </div>
     <script>        
 
-    document.querySelector('.hamburger').addEventListener('click', () => {
-            const sidebar = document.querySelector('.sidebar');
-            const content = document.querySelector('.content');
-            sidebar.classList.toggle('collapsed');
-        });
+        document.querySelector('.hamburger').addEventListener('click', () => {
+                const sidebar = document.querySelector('.sidebar');
+                const content = document.querySelector('.content');
+                sidebar.classList.toggle('collapsed');
+            });
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
