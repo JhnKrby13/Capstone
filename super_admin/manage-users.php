@@ -117,9 +117,9 @@ $userResult = $userQuery->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="manage-photographer.php"><i class="fas fa-camera"></i> <span>Photographers</span></a></li>
                 <li><a href="manage-users.php"><i class="fas fa-users"></i> <span>Clients</span></a></li>
                 <li><a href="manage-gallery.php"><i class="fas fa-images"></i> <span>Gallery</span></a></li>
-                <li><a href="recent-history.php"><i class="fas fa-calendar-alt"></i> <span>Recent History</span></a></li>
+                <!-- <li><a href="recent-history.php"><i class="fas fa-calendar-alt"></i> <span>Recent History</span></a></li> -->
                 <li><a href="recycle-bin.php"><i class="fas fa-trash-alt"></i> <span>Archive</span></a></li>
-                <li><a href="system-settings.php"><i class="fas fa-cogs"></i> <span>Settings</span></a></li>
+                <!-- <li><a href="system-settings.php"><i class="fas fa-cogs"></i> <span>Settings</span></a></li> -->
             </ul>
         </div>
 

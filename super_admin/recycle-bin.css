@@ -131,6 +131,7 @@ body {
     height: 100vh;
     margin-top: 10px;
     margin-left: 250px; 
+    overflow-x: hidden;
     transition: margin-left 0.3s ease;
 }
 
@@ -145,6 +146,7 @@ body {
 }
 
 .card {
+    width: 165vh;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -153,7 +155,6 @@ body {
     background-clip: border-box;
     border: 1px solid rgba(0, 0, 0, .125);
     border-radius: .25rem;
-    width: 165vh;
 }
 
 .archive-container {
@@ -169,7 +170,6 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 20px;
-    overflow-x: auto;
     width: 100vh;
 }
 

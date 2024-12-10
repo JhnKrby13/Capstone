@@ -108,9 +108,9 @@ $photographers = getPhotographers($pdo);
                 <li><a href="manage-photographer.php"><i class="fas fa-camera"></i> <span>Photographers</span></a></li>
                 <li><a href="manage-users.php"><i class="fas fa-users"></i> <span>Clients</span></a></li>
                 <li><a href="manage-gallery.php"><i class="fas fa-images"></i> <span>Gallery</span></a></li>
-                <li><a href="recent-history.php"><i class="fas fa-calendar-alt"></i> <span>Recent History</span></a></li>
+                <!-- <li><a href="recent-history.php"><i class="fas fa-calendar-alt"></i> <span>Recent History</span></a></li> -->
                 <li><a href="recycle-bin.php"><i class="fas fa-trash-alt"></i> <span>Archive</span></a></li>
-                <li><a href="system-settings.php"><i class="fas fa-cogs"></i> <span>Settings</span></a></li>
+                <!-- <li><a href="system-settings.php"><i class="fas fa-cogs"></i> <span>Settings</span></a></li> -->
             </ul>
         </div>
         <div class="content">
@@ -184,18 +184,28 @@ $photographers = getPhotographers($pdo);
                         data: {
                             id: id
                         },
+                        dataType: 'json',
                         success: function(response) {
-                            Swal.fire({
-                                title: "Archived!",
-                                text: "The photographer has been archived.",
-                                icon: "success"
-                            });
-                            location.reload();
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    title: "Archived!",
+                                    text: response.message,
+                                    icon: "success"
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: response.message || "Failed to archive photographer.",
+                                    icon: "error"
+                                });
+                            }
                         },
-                        error: function() {
+                        error: function(xhr, status, error) {
                             Swal.fire({
                                 title: "Failed",
-                                text: "Failed to archive photographer.",
+                                text: "An error occurred: " + error,
                                 icon: "error"
                             });
                         }
@@ -203,6 +213,7 @@ $photographers = getPhotographers($pdo);
                 }
             });
         }
+
 
         function confirmEdit(photographerId) {
             Swal.fire({
@@ -215,12 +226,10 @@ $photographers = getPhotographers($pdo);
                 confirmButtonText: 'Yes, edit it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Redirect to the edit page for the selected photographer
                     window.location.href = 'edit-photographer.php?id=' + photographerId;
                 }
             });
         }
-
 
         document.querySelector('.hamburger').addEventListener('click', () => {
             const sidebar = document.querySelector('.sidebar');
@@ -228,6 +237,7 @@ $photographers = getPhotographers($pdo);
             sidebar.classList.toggle('collapsed');
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
