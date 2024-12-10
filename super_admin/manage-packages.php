@@ -78,17 +78,14 @@ if (isset($_GET['archive'])) {
     try {
         $package_id = intval($_GET['archive']);
 
-        // Get the package details
         $stmt = $pdo->prepare("SELECT * FROM packages WHERE id = ?");
         $stmt->execute([$package_id]);
         $package = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($package) {
-            // Insert into archived_packages table
             $archiveStmt = $pdo->prepare("INSERT INTO archived_packages (id, name, price, description, image_path) VALUES (?, ?, ?, ?, ?)");
             $archiveStmt->execute([$package['id'], $package['name'], $package['price'], $package['description'], $package['image_path']]);
 
-            // Delete from the original table
             $deleteStmt = $pdo->prepare("DELETE FROM packages WHERE id = ?");
             $deleteStmt->execute([$package_id]);
 
@@ -208,7 +205,9 @@ try {
                                 <td><img src="<?php echo htmlspecialchars($package['image_path']); ?>" alt="Package Image" class="img-thumbnail" style="width: 100px; height: auto;"></td>
                                 <td>
                                     <a href="edit-package.php?id=<?php echo htmlspecialchars($package['id']); ?>" class="edit"><i class="fas fa-edit"></i></a>
-                                    <a href="manage-packages.php?delete=<?php echo htmlspecialchars($package['id']); ?>" class="delete" onclick="return confirm('Are you sure you want to delete this package?');"><i class="fas fa-trash"></i></a>
+                                    <a href="javascript:void(0);" class="btn-archive" onclick="archivePackage(<?php echo $package['id']; ?>)">
+                                        <i class="fas fa-archive"></i>
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -221,7 +220,52 @@ try {
             </table>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.js"></script>
     <script>
+        function archivePackage(packageId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to archive this package?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, archive it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Perform the AJAX request to archive the package
+                    fetch('archive_package.php', {
+                            method: 'GET', // You can use POST as well
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                'id': packageId // Send the package ID
+                            })
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            console.log(data); // Debugging step: see the response from PHP
+                            // Check if the package was archived successfully
+                            if (data.trim() === 'Package archived successfully!') {
+                                Swal.fire(
+                                    'Archived!',
+                                    'The package has been successfully archived.',
+                                    'success'
+                                ).then(() => {
+                                    window.location.href = 'manage-packages.php'; // Redirect after success
+                                });
+                            } else {
+                                Swal.fire('Error!', data, 'error'); // Show error if something goes wrong
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error); // Log any AJAX error
+                            Swal.fire('Error!', 'There was a problem archiving the package.', 'error');
+                        });
+                }
+            });
+        }
 
         document.querySelector('.hamburger').addEventListener('click', () => {
             const sidebar = document.querySelector('.sidebar');
@@ -229,6 +273,8 @@ try {
             sidebar.classList.toggle('collapsed');
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 

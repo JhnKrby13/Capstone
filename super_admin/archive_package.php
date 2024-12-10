@@ -1,32 +1,24 @@
 <?php
-require '../connection.php';  // Ensure to include your database connection
+require '../connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-    $packageId = intval($_POST['id']);  // Get the package ID from the POST request
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+    $packageId = intval($_GET['id']);
 
     try {
-        $pdo->beginTransaction();
+        // Update the package status to "archived"
+        $stmt = $pdo->prepare("UPDATE packages SET status = 'archived' WHERE id = ?");
+        $stmt->execute([$packageId]);
 
-        // Move the package to the archive
-        $stmt = $pdo->prepare("INSERT INTO package_archive (id, name, price, description, image_path)
-                               SELECT id, name, price, description, image_path
-                               FROM packages WHERE id = :id");
-        $stmt->execute(['id' => $packageId]);
-
-        // Delete the package from the packages table
-        $stmt = $pdo->prepare("DELETE FROM packages WHERE id = :id");
-        $stmt->execute(['id' => $packageId]);
-
-        $pdo->commit();
-        
-        header('Location: manage-packages.php?success=1'); // Redirect after successful archive
-        exit;
-    } catch (Exception $e) {
-        $pdo->rollBack();
+        // Check if the update affected any rows
+        if ($stmt->rowCount() > 0) {
+            echo "Package archived successfully!";
+        } else {
+            echo "Error: Package not found or already archived.";
+        }
+    } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 } else {
-    header('Location: manage-packages.php');
-    exit;
+    echo "Error: Invalid request."; // Handle invalid requests
 }
 ?>

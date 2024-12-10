@@ -1,7 +1,6 @@
 <?php
 require '../connection.php';
 
-// Ensure user is logged in and has the admin role
 session_start();
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     header('Location: ../../auth/login.php');
@@ -9,40 +8,34 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 }
 
 if ($_SESSION["role"] !== "admin") {
-    header('Location: ../unauthorized.php'); // Redirect if not an admin
+    header('Location: ../unauthorized.php');
     exit;
 }
 
-// Ensure the 'id' parameter is in the URL
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo "Package ID is missing!";
     exit;
 }
 
-// Get package details
 $packageId = intval($_GET['id']);
 $stmt = $pdo->prepare("SELECT * FROM packages WHERE id = ?");
 $stmt->execute([$packageId]);
 $package = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// If no package found, show error
 if (!$package) {
     echo "Package not found!";
     exit;
 }
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $package_name = htmlspecialchars($_POST['package_name']);
         $package_price = htmlspecialchars($_POST['package_price']);
         $package_description = htmlspecialchars($_POST['package_description']);
 
-        // Update the database
         $stmt = $pdo->prepare("UPDATE packages SET name = ?, price = ?, description = ? WHERE id = ?");
         $stmt->execute([$package_name, $package_price, $package_description, $packageId]);
 
-        // Set a session variable to know the package was updated successfully
         $_SESSION['package_updated'] = true;
     } catch (PDOException $e) {
         $message = "Error: " . $e->getMessage();
@@ -99,13 +92,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     confirmButtonText: 'Yes, save it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Submit the form if the user confirms
                         document.getElementById('editPackageForm').submit();
                     }
                 });
             }
 
-            // Check for package update and trigger success redirect after submission
             <?php if (isset($_SESSION['package_updated']) && $_SESSION['package_updated']): ?>
                 Swal.fire({
                     title: 'Saved!',
@@ -113,9 +104,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then(() => {
-                    window.location.href = 'manage-packages.php'; // Redirect to manage-package.php after success
+                    window.location.href = 'manage-packages.php'; 
                 });
-                <?php unset($_SESSION['package_updated']); ?> // Unset session variable after redirect
+                <?php unset($_SESSION['package_updated']); ?> 
             <?php endif; ?>
         </script>
 </body>
