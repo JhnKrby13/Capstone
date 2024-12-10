@@ -73,25 +73,26 @@ function fetchData($pdo)
     $bookingData = $bookingDataQuery->fetchAll(PDO::FETCH_ASSOC);
 
     $mostBookedPhotographerQuery = $pdo->query("
-    SELECT photographers.name, COUNT(*) as bookings_count
-    FROM booking
-    JOIN photographers ON booking.photographer_id = photographers.id
-    GROUP BY photographers.id
-    ORDER BY bookings_count DESC
-    LIMIT 1
-");
+        SELECT photographers.id, photographers.name, COUNT(booking.id) as bookings_count 
+        FROM photographers 
+        LEFT JOIN booking ON booking.photographer_id = photographers.id 
+        GROUP BY photographers.id 
+        ORDER BY bookings_count DESC
+    ");
 
-    $mostBookedPhotographer = $mostBookedPhotographerQuery->fetch(PDO::FETCH_ASSOC);
+    $mostBookedPhotographer = $mostBookedPhotographerQuery->fetchAll(PDO::FETCH_ASSOC);
 
-    if (!$mostBookedPhotographer) {
-        $mostBookedPhotographer = [
-            'name' => 'No photographer data available',
-            'bookings_count' => 0
-        ];
-    }
 
-    $data['mostBookedPhotographer'] = $mostBookedPhotographer;
-    
+    // if (!$mostBookedPhotographer) {
+    //     $mostBookedPhotographer = [
+    //         'name' => 'No photographer data available',
+    //         'bookings_count' => 0
+    //     ];
+    // }
+
+    // $data['mostBookedPhotographer'] = $mostBookedPhotographer;
+
+
     return [
         'totalBookings' => $totalBookings,
         'totalRevenue' => $totalRevenue,
@@ -101,7 +102,7 @@ function fetchData($pdo)
         'totalPhotographers' => $totalPhotographers,
         'totalUsers' => $totalUsers,
         'bookingData' => $bookingData,
-        'mostBookedPhotographer' => $mostBookedPhotographer,
+        'mostBookedPhotographer' => $mostBookedPhotographer
     ];
 }
 
@@ -238,6 +239,9 @@ $data = fetchData($pdo);
             const bookingData = <?php echo json_encode($data['bookingData']); ?>;
             const mostBookedPhotographer = <?php echo json_encode($data['mostBookedPhotographer']); ?>;
 
+            
+            console.log(mostBookedPhotographer);
+
             document.getElementById('total-bookings').textContent = totalBookings;
             document.getElementById('total-revenue').textContent = '₱' + totalRevenue.toFixed(2);
             document.getElementById('total-packages').textContent = totalPackages;
@@ -283,9 +287,7 @@ $data = fetchData($pdo);
             const packageChart = new ApexCharts(document.querySelector("#package-chart"), packageChartOptions);
             packageChart.render();
 
-
-            // console.log('Booking Data:', bookingData);
-
+            
             if (!bookingData || bookingData.length === 0) {
                 console.error('No booking data available.');
                 document.getElementById('bookings-chart').innerHTML = '<p>No data available to render the chart.</p>';
@@ -361,35 +363,31 @@ $data = fetchData($pdo);
             function getFilteredData(data, timePeriod) {
                 return data;
             }
+            // most booked photographer // 
 
-            // console.log('Most Booked Photographer', mostBookedPhotographer);
-
-            document.addEventListener("DOMContentLoaded", function() {
-                const mostBookedPhotographer = <?php echo json_encode($data['mostBookedPhotographer']); ?>;
-                if (mostBookedPhotographer && mostBookedPhotographer.name !== 'No photographer data available') {
-                    document.getElementById('photographer-chart').innerHTML = mostBookedPhotographer.name + ' (' + mostBookedPhotographer.bookings_count + ' booking)';
-                } else {
-                    document.getElementById('photographer-chart').innerHTML = 'No photographer data available.';
-                }
-                var options = {
-                    chart: {
-                        type: 'pie',
-                        height: 350
-                    },
-                    labels: [mostBookedPhotographer.name],
-                    series: [mostBookedPhotographer.bookings_count],
-                    title: {
-                        text: 'Most Booked Photographer'
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function (value) {
-                                return value + " bookings"; 
-                            }
+            if (mostBookedPhotographer && mostBookedPhotographer.name !== 'No photographer data available') {
+                document.getElementById('photographer-chart').innerHTML = mostBookedPhotographer[0].name + ' (' + mostBookedPhotographer[0].bookings_count + ' booking)';
+            } else {
+                document.getElementById('photographer-chart').innerHTML = 'No photographer data available.';
+            }
+            var options = {
+                chart: {
+                    type: 'pie',
+                    height: 350
+                },
+                labels: mostBookedPhotographer.map(photographer => photographer.name),
+                series: mostBookedPhotographer.map(photographer => photographer.bookings_count),
+                title: {
+                    text: 'Most Booked Photographer'
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(value) {
+                            return value + " bookings";
                         }
                     }
                 }
-            });
+            };
 
             const photographerChart = new ApexCharts(document.querySelector("#photographer-chart"), options);
             photographerChart.render();
@@ -419,6 +417,9 @@ $data = fetchData($pdo);
             const content = document.querySelector('.content');
             sidebar.classList.toggle('collapsed');
         });
+    </script>
+    <script>
+            
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
