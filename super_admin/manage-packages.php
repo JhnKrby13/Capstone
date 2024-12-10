@@ -1,5 +1,5 @@
 <?php
-require '../connection.php'; 
+require '../connection.php';
 
 session_start();
 
@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 }
 
 if ($_SESSION["role"] === "admin") {
-    
 } else {
     if ($_SESSION["role"] === "client") {
         if (!empty($_SERVER['HTTP_REFERER'])) {
@@ -19,8 +18,7 @@ if ($_SESSION["role"] === "admin") {
             header('Location: ../client/packages');
             exit();
         }
-        
-    } else if ($_SESSION["role"] === "photographer"){
+    } else if ($_SESSION["role"] === "photographer") {
         if (!empty($_SERVER['HTTP_REFERER'])) {
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit();
@@ -29,8 +27,7 @@ if ($_SESSION["role"] === "admin") {
             exit();
         }
     }
-}   
-
+}
 $targetDir = '../image/';
 
 if (isset($_POST['add_package'])) {
@@ -77,6 +74,33 @@ if (isset($_GET['delete'])) {
     }
 }
 
+if (isset($_GET['archive'])) {
+    try {
+        $package_id = intval($_GET['archive']);
+
+        // Get the package details
+        $stmt = $pdo->prepare("SELECT * FROM packages WHERE id = ?");
+        $stmt->execute([$package_id]);
+        $package = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($package) {
+            // Insert into archived_packages table
+            $archiveStmt = $pdo->prepare("INSERT INTO archived_packages (id, name, price, description, image_path) VALUES (?, ?, ?, ?, ?)");
+            $archiveStmt->execute([$package['id'], $package['name'], $package['price'], $package['description'], $package['image_path']]);
+
+            // Delete from the original table
+            $deleteStmt = $pdo->prepare("DELETE FROM packages WHERE id = ?");
+            $deleteStmt->execute([$package_id]);
+
+            $message = "Package archived successfully!";
+        } else {
+            $message = "Package not found.";
+        }
+    } catch (PDOException $e) {
+        $message = "Error archiving package: " . $e->getMessage();
+    }
+}
+
 try {
     $stmt = $pdo->query("SELECT id, name, price, description, image_path FROM packages");
     $packages = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -87,14 +111,19 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Packages</title></title>
+    <title>Manage Packages</title>
+    </title>
     <link rel="stylesheet" href="manage-packages.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.22/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.22/dist/sweetalert2.min.js"></script>
+
 </head>
 
 <body>
@@ -192,17 +221,17 @@ try {
             </table>
         </div>
     </div>
-    <script>  
+    <script>
 
-            document.querySelector('.hamburger').addEventListener('click', () => {
+        document.querySelector('.hamburger').addEventListener('click', () => {
             const sidebar = document.querySelector('.sidebar');
             const content = document.querySelector('.content');
             sidebar.classList.toggle('collapsed');
         });
-
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>
 
 <?php

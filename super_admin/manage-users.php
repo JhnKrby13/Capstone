@@ -190,7 +190,7 @@ $userResult = $userQuery->fetchAll(PDO::FETCH_ASSOC);
         function editUser(id) {
             Swal.fire({
                 title: "Are you sure?",
-                text: "Do you want to edit this booking?",
+                text: "Do you want to edit this user?",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",

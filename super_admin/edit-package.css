@@ -1,0 +1,159 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Container for the form */
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Page Title */
+.page-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    color: #333;
+}
+
+/* Form Labels */
+label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+    color: #333;
+}
+
+/* Form Input */
+input[type="text"], 
+input[type="number"], 
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Submit Button */
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #3085d6;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+input[type="submit"]:hover {
+    background-color: #2677b8;
+}
+
+/* Cancel Button */
+a.btn-secondary {
+    width: 100%;
+    padding: 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+a.btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+/* Error or success messages */
+.message {
+    font-size: 1rem;
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.success-message {
+    color: green;
+}
+
+/* Table styling for displaying existing packages */
+table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+td {
+    background-color: #fff;
+}
+
+td img {
+    width: 100px;
+    height: auto;
+}
+
+/* Actions column (edit and delete buttons) */
+td a {
+    padding: 8px 12px;
+    margin-right: 10px;
+    color: #3085d6;
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+td a:hover {
+    color: #2677b8;
+}
+
+td a.delete {
+    color: #e74c3c;
+}
+
+td a.delete:hover {
+    color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
