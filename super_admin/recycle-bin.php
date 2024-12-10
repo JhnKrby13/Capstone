@@ -117,254 +117,427 @@ try {
         <div class="content">
             <h1>Archive</h1>
 
-            <div class="col">
-                <div class="col-lg-6 col-md-12 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
-                            <h5><i class="fas fa-calendar-alt"></i> Archived Bookings</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Package Type</th>
-                                        <th>Date/Time</th>
-                                        <th>Venue</th>
-                                        <th>Price</th>
-                                        <th>Payment Mode</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    foreach ($archivedBookings as $booking): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($booking['id']) ?></td>
-                                            <td><?= htmlspecialchars($booking['name']) ?></td>
-                                            <td><?= htmlspecialchars($booking['package_type']) ?></td>
-                                            <td><?= htmlspecialchars($booking['datetime']) ?></td>
-                                            <td><?= htmlspecialchars($booking['venue']) ?></td>
-                                            <td><?= htmlspecialchars($booking['price']) ?></td>
-                                            <td><?= htmlspecialchars($booking['payment_mode']) ?></td>
-                                            <td><?= htmlspecialchars($booking['status']) ?></td>
-                                            <td>
-                                                <button class="btn btn-success btn-sm">Restore</button>
-                                                <button class="btn btn-danger btn-sm">Delete </button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-white">
+                        <h5><i class="fas fa-calendar-alt"></i> Archived Bookings</h5>
                     </div>
-                </div>
-
-                <div class="col-lg-6 col-md-12 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-warning text-white">
-                            <h5><i class="fas fa-camera"></i> Archived Photographers</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Contact</th>
-                                        <th>Address</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $stmt = $pdo->query("SELECT * FROM photographer_archive");
-                                    $photographers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                    if ($photographers) {
-                                        foreach ($photographers as $photographer) {
-                                            echo "<tr>";
-                                            echo "<td>" . htmlspecialchars($photographer['id']) . "</td>";
-                                            echo "<td>" . htmlspecialchars($photographer['name']) . "</td>";
-                                            echo "<td>" . htmlspecialchars($photographer['email']) . "</td>";
-                                            echo "<td>" . htmlspecialchars($photographer['contact']) . "</td>";
-                                            echo "<td>" . htmlspecialchars($photographer['address']) . "</td>";
-                                            echo "<td>";
-                                            echo '<a href="restore_photographer.php?restore=' . $photographer['id'] . '" class="btn btn-success btn-sm">Restore</a> ';
-                                            echo '<a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="deletePhotographer(' . $photographer['id'] . ')">Delete Permanently</a>';
-                                            echo "</td>";
-                                            echo "</tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='6'>No photographers found.</td></tr>";
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Package Type</th>
+                                    <th>Date/Time</th>
+                                    <th>Venue</th>
+                                    <th>Price</th>
+                                    <th>Payment Mode</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $stmt = $pdo->query("SELECT * FROM booking_archive");
+                                $archivedBookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                if ($archivedBookings) {
+                                    foreach ($archivedBookings as $booking) {
+                                        echo "<tr>";
+                                        echo "<td>" . htmlspecialchars($booking['id']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($booking['name']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($booking['package_type']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($booking['datetime']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($booking['venue']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($booking['price']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($booking['payment_mode']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($booking['status']) . "</td>";
+                                        echo "<td>";
+                                        echo '<a href="javascript:void(0);" class="btn btn-success btn-sm" onclick="restoreBooking(' . $booking['id'] . ')">Restore</a> ';
+                                        echo '<a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="deleteBooking(' . $booking['id'] . ')">Delete Permanently</a>';
+                                        echo "</td>";
+                                        echo "</tr>";
                                     }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
+                                } else {
+                                    echo "<tr><td colspan='9'>No archived bookings found.</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-
-                <div class="col-lg-6 col-md-12 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-info text-white">
-                            <h5><i class="fas fa-box-open"></i> Archived Packages</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Price</th>
-                                        <th>Description</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    foreach ($archivedPackages as $packages): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($package['id']) ?></td>
-                                            <td><?= htmlspecialchars($package['Name']) ?></td>
-                                            <td><?= htmlspecialchars($package['Price']) ?></td>
-                                            <td><?= htmlspecialchars($package['Description']) ?></td>
-                                            <td><span class="badge bg-danger"><?= htmlspecialchars($package['deleted_at']) ?></span></td>
-                                            <td>
-                                                <button class="btn btn-success btn-sm">Restore</button>
-                                                <button class="btn btn-danger btn-sm">Delete Permanently</button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 col-md-12 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-secondary text-white">
-                            <h5><i class="fas fa-user-slash"></i> Archived Clients</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Address</th>
-                                        <th>Email</th>
-                                        <th>Contact</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    foreach ($archivedUsers as $user): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($client['id']) ?></td>
-                                            <td><?= htmlspecialchars($client['firstname']) ?></td>
-                                            <td><?= htmlspecialchars($client['lastname']) ?></td>
-                                            <td><?= htmlspecialchars($client['address']) ?></td>
-                                            <td><?= htmlspecialchars($client['contact']) ?></td>
-                                            <td><span class="badge bg-danger"><?= htmlspecialchars($client['deleted_at']) ?></span></td>
-                                            <td>
-                                                <button class="btn btn-success btn-sm">Restore</button>
-                                                <button class="btn btn-danger btn-sm">Delete Permanently</button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
+
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-white">
+                        <h5><i class="fas fa-camera"></i> Archived Photographers</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Address</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $stmt = $pdo->query("SELECT * FROM photographer_archive");
+                                $photographers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                if ($photographers) {
+                                    foreach ($photographers as $photographer) {
+                                        echo "<tr>";
+                                        echo "<td>" . htmlspecialchars($photographer['id']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($photographer['name']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($photographer['email']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($photographer['contact']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($photographer['address']) . "</td>";
+                                        echo "<td>";
+                                        echo '<a href="javascript:void(0);" class="btn btn-success btn-sm" onclick="restorePhotographer(' . $photographer['id'] . ')">Restore</a> ';
+                                        echo '<a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="deletePhotographer(' . $photographer['id'] . ')">Delete Permanently</a>';
+                                        echo "</td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='6'>No photographers found.</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <h5><i class="fas fa-box"></i> Archived Packages</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                // Fetch archived packages
+                                $stmt = $pdo->query("SELECT * FROM package_archive");
+                                $archivedPackages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                if ($archivedPackages) {
+                                    foreach ($archivedPackages as $package) {
+                                        echo "<tr>";
+                                        echo "<td>" . htmlspecialchars($package['id']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($package['name']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($package['price']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($package['description']) . "</td>";
+                                        echo "<td><span class='badge bg-danger'>" . htmlspecialchars($package['deleted_at']) . "</span></td>";
+                                        echo "<td>";
+                                        echo '<a href="javascript:void(0);" class="btn btn-success btn-sm" onclick="restorePackage(' . $package['id'] . ')">Restore</a> ';
+                                        echo '<a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="deletePackage(' . $package['id'] . ')">Delete Permanently</a>';
+                                        echo "</td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='5'>No archived packages found.</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <h5><i class="fas fa-user"></i> Archived Clients</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Address</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($archivedUsers as $user): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($client['id']) ?></td>
+                                        <td><?= htmlspecialchars($client['firstname']) ?></td>
+                                        <td><?= htmlspecialchars($client['lastname']) ?></td>
+                                        <td><?= htmlspecialchars($client['address']) ?></td>
+                                        <td><?= htmlspecialchars($client['contact']) ?></td>
+                                        <td><span class="badge bg-danger"><?= htmlspecialchars($client['deleted_at']) ?></span></td>
+                                        <td>
+                                            <button class="btn btn-success btn-sm">Restore</button>
+                                            <button class="btn btn-danger btn-sm">Delete Permanently</button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+    </div>
     <script>
-         function restorePhotographer(photographerId) {
-            $.ajax({
-                url: 'restore_photographer.php',
-                type: 'GET',
-                data: { restore: photographerId },
-                success: function(response) {
-                    const data = JSON.parse(response); // Parse the JSON response
-                    if (data.status === 'success') {
-                        // Show success message
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            // Optionally reload the page or update the UI
-                            location.reload();
-                        });
-                    } else {
-                        // Show error message
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message,
-                            showConfirmButton: true
-                        });
-                    }
-                },
-                error: function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'An unexpected error occurred.',
-                        showConfirmButton: true
+        function restoreBooking(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action will restore the booking.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, restore it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'restore_booking.php',
+                        type: 'GET',
+                        data: {
+                            restore: id
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    title: "Restored!",
+                                    text: response.message,
+                                    icon: "success"
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Error",
+                                    text: response.message,
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX error:", error);
+                            Swal.fire("Error", "Failed to restore booking.", "error");
+                        }
                     });
                 }
             });
         }
 
-        // Function to permanently delete a photographer
-        function deletePhotographer(photographerId) {
-            $.ajax({
-                url: 'delete_photographer.php',
-                type: 'GET',
-                data: { delete: photographerId },
-                success: function(response) {
-                    const data = JSON.parse(response); // Parse the JSON response
-                    if (data.status === 'success') {
-                        // Show success message
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Deleted!',
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            // Optionally reload the page or update the UI
-                            location.reload();
-                        });
-                    } else {
-                        // Show error message
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message,
-                            showConfirmButton: true
-                        });
-                    }
-                },
-                error: function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'An unexpected error occurred.',
-                        showConfirmButton: true
+        function deleteBooking(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action will permanently delete the booking.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'delete_booking.php',
+                        type: 'GET',
+                        data: {
+                            delete: id
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: response.message,
+                                    icon: "success"
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Error",
+                                    text: response.message,
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX error:", error);
+                            Swal.fire("Error", "Failed to delete booking.", "error");
+                        }
+                    });
+                }
+            });
+        }
+
+        function restorePhotographer(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action will restore the photographer.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, restore it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'restore_photographer.php',
+                        type: 'GET',
+                        data: {
+                            restore: id
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    title: "Restored!",
+                                    text: response.message,
+                                    icon: "success"
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Error",
+                                    text: response.message,
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                title: "Error",
+                                text: "Failed to restore photographer.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function deletePhotographer(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action will permanently delete the photographer.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'delete_photographer.php',
+                        type: 'GET',
+                        data: {
+                            delete: id
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                Swal.fire("Deleted!", response.message, "success").then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire("Error", response.message, "error");
+                            }
+                        },
+                        error: function() {
+                            Swal.fire("Error", "Failed to delete photographer.", "error");
+                        }
+                    });
+                }
+            });
+        }
+
+        function restorePackage(packageId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to restore this package?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, restore it!',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'restore_package.php',
+                        type: 'GET',
+                        data: {
+                            restore: packageId
+                        },
+                        success: function(response) {
+                            if (response === 'success') {
+                                Swal.fire('Restored!', 'The package has been restored.', 'success');
+                                setTimeout(function() {
+                                    location.reload(); 
+                                }, 1500);
+                            } else {
+                                Swal.fire('Failed!', 'There was an issue restoring the package.', 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Error!', 'An error occurred. Please try again later.', 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        function deletePackage(packageId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This will permanently delete the package!",
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'delete_package.php',
+                        type: 'GET',
+                        data: {
+                            delete: packageId
+                        },
+                        success: function(response) {
+                            if (response === 'success') {
+                                Swal.fire('Deleted!', 'The package has been permanently deleted.', 'success');
+                                setTimeout(function() {
+                                    location.reload(); 
+                                }, 1500);
+                            } else {
+                                Swal.fire('Failed!', 'There was an issue deleting the package.', 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Error!', 'An error occurred. Please try again later.', 'error');
+                        }
                     });
                 }
             });

@@ -1,23 +1,24 @@
 <?php
-require '../connection.php';  // Make sure to include your database connection
+require '../connection.php';
+
+header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['delete'])) {
-    $bookingId = intval($_GET['delete']);  // Get the booking ID from the GET request
+    $bookingId = intval($_GET['delete']);
 
     try {
-        // Delete the booking permanently from the archive
+        // Delete booking from the archive (or directly from the main table if no archive exists)
         $stmt = $pdo->prepare("DELETE FROM booking_archive WHERE id = :id");
         $stmt->execute(['id' => $bookingId]);
 
-        // Redirect after deleting the booking
-        header('Location: manage-bookings.php?success=1');
+        echo json_encode(['status' => 'success', 'message' => 'Booking deleted permanently.']);
         exit;
     } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
+        echo json_encode(['status' => 'error', 'message' => 'Failed to delete booking.']);
+        exit;
     }
 } else {
-    // Redirect if the request method is not GET or ID is not set
-    header('Location: manage-bookings.php');
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request.']);
     exit;
 }
 ?>
