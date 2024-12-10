@@ -40,8 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['restore'])) {
         }
     } catch (Exception $e) {
         $pdo->rollBack();
-        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
-        exit;
+        echo json_encode(['status' => 'error', 'message' => 'Error restoring photographer: ' . $e->getMessage()]);
     }
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request.']);

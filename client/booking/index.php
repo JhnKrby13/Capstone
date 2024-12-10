@@ -128,7 +128,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <li><a href="../packages/"><i class="fas fa-box"></i> <span>Packages</span></a></li>
                 <li><a href="./" class="active"><i class="fas fa-calendar-check"></i> <span>Booking</span></a></li>
                 <li><a href="../photographer/"><i class="fas fa-camera"></i> <span>Photographer List</span></a></li>
-                <li><a href="../gallery/"><i class="fas fa-images"></i> <span>Gallery</span></a></li>
+                <!-- <li><a href="../gallery/"><i class="fas fa-images"></i> <span>Gallery</span></a></li> -->
             </ul>
         </div>
         <div class="content">
@@ -189,7 +189,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <label for="payment_mode">Payment Mode:</label>
                     <select id="payment_mode" name="payment_mode" required>
                         <option value="cash">Cash</option>
-                        <option value="gcash">GCash</option>
                     </select>
                 </div>
 
@@ -217,7 +216,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     </div>
                 </div>
 
-                <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
+                <button type="submit" id="submitButton" class="btn btn-primary">Confirm</button>
             </form>
         </div>
     </div>

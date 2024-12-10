@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['delete'])) {
         echo json_encode(['status' => 'success', 'message' => 'Photographer deleted permanently.']);
         exit;
     } catch (Exception $e) {
-        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        echo json_encode(['status' => 'error', 'message' => 'Failed to delete photographer.']);
         exit;
     }
 } else {

@@ -192,8 +192,8 @@ try {
                                             echo "<td>" . htmlspecialchars($photographer['contact']) . "</td>";
                                             echo "<td>" . htmlspecialchars($photographer['address']) . "</td>";
                                             echo "<td>";
-                                            echo '<button class="btn btn-success btn-sm" onclick="restorePhotographer(' . $photographer['id'] . ')">Restore</button> ';
-                                            echo '<button class="btn btn-danger btn-sm" onclick="deletePhotographer(' . $photographer['id'] . ')">Delete Permanently</button>';
+                                            echo '<a href="restore_photographer.php?restore=' . $photographer['id'] . '" class="btn btn-success btn-sm">Restore</a> ';
+                                            echo '<a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="deletePhotographer(' . $photographer['id'] . ')">Delete Permanently</a>';
                                             echo "</td>";
                                             echo "</tr>";
                                         }
@@ -265,8 +265,7 @@ try {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $stmt = $pdo->query("SELECT * FROM clients_archive");
-                                    foreach ($stmt->fetchAll() as $client): ?>
+                                    foreach ($archivedUsers as $user): ?>
                                         <tr>
                                             <td><?= htmlspecialchars($client['id']) ?></td>
                                             <td><?= htmlspecialchars($client['firstname']) ?></td>
@@ -290,72 +289,82 @@ try {
         </div>
     </div>
     <script>
-        function restorePhotographer(id) {
-            console.log("Restore button clicked for ID: ", id);
-            Swal.fire({
-                title: "Are you sure?",
-                text: "This will restore the photographer.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, restore it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: 'restore_photographer.php',
-                        type: 'GET',
-                        data: {
-                            restore: id
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.status === 'success') {
-                                Swal.fire("Restored!", response.message, "success").then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire("Error", response.message, "error");
-                            }
-                        },
-                        error: function() {
-                            Swal.fire("Error", "Failed to restore photographer.", "error");
-                        }
+         function restorePhotographer(photographerId) {
+            $.ajax({
+                url: 'restore_photographer.php',
+                type: 'GET',
+                data: { restore: photographerId },
+                success: function(response) {
+                    const data = JSON.parse(response); // Parse the JSON response
+                    if (data.status === 'success') {
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            // Optionally reload the page or update the UI
+                            location.reload();
+                        });
+                    } else {
+                        // Show error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message,
+                            showConfirmButton: true
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'An unexpected error occurred.',
+                        showConfirmButton: true
                     });
                 }
             });
         }
 
-        function deletePhotographer(id) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "This action will permanently delete the photographer.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: 'delete_photographer.php',
-                        type: 'GET',
-                        data: {
-                            delete: id
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.status === 'success') {
-                                Swal.fire("Deleted!", response.message, "success").then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire("Error", response.message, "error");
-                            }
-                        },
-                        error: function() {
-                            Swal.fire("Error", "Failed to delete photographer.", "error");
-                        }
+        // Function to permanently delete a photographer
+        function deletePhotographer(photographerId) {
+            $.ajax({
+                url: 'delete_photographer.php',
+                type: 'GET',
+                data: { delete: photographerId },
+                success: function(response) {
+                    const data = JSON.parse(response); // Parse the JSON response
+                    if (data.status === 'success') {
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            // Optionally reload the page or update the UI
+                            location.reload();
+                        });
+                    } else {
+                        // Show error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message,
+                            showConfirmButton: true
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'An unexpected error occurred.',
+                        showConfirmButton: true
                     });
                 }
             });
