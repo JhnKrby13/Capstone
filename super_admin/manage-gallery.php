@@ -33,18 +33,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle Folder Creation
     if (isset($_POST['create_folder'])) {
-        $photographerName = $_POST['photographer_name'];  
+        $photographerName = $_POST['photographer_name'];
         $baseDir = 'gallery/' . $photographerName;
 
-        if (!is_dir($baseDir)) {
-            mkdir($baseDir, 0777, true);  // Create photographer folder
+        if (!is_dir('gallery')) {
+            echo "Gallery directory does not exist!";
         }
 
-        $eventName = $_POST['event_name'];  
+        $eventName = $_POST['event_name'];
         $eventDir = $baseDir . '/' . $eventName;
 
         if (!is_dir($eventDir)) {
-            mkdir($eventDir, 0777, true);  // Create event subfolder
+            mkdir($eventDir, 0777, true); 
         }
     }
 
@@ -63,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Handle File Upload
     if (isset($_FILES['photo'])) {
         $photographerName = $_POST['photographer_name'];
         $eventName = $_POST['event_name'];
@@ -86,12 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle Folder Deletion
     if (isset($_POST['delete_folder'])) {
-        $photographerName = $_POST['photographer_name_delete'];  
-        $eventName = $_POST['event_name_delete']; 
+        $photographerName = $_POST['photographer_name_delete'];
+        $eventName = $_POST['event_name_delete'];
         $folderPath = 'gallery/' . $photographerName . '/' . $eventName;
 
         if (is_dir($folderPath)) {
-            function deleteFolder($folderPath) {
+            function deleteFolder($folderPath)
+            {
                 $files = array_diff(scandir($folderPath), array('.', '..'));
                 foreach ($files as $file) {
                     $filePath = $folderPath . DIRECTORY_SEPARATOR . $file;
@@ -190,67 +190,71 @@ $photographers = $query->fetchAll(PDO::FETCH_ASSOC);
                     <div class="form-container">
                         <h4>Create a New Folder</h4>
                         <form action="manage-gallery.php" method="POST">
-
                             <label for="event_name">Event Name:</label>
                             <input type="text" name="event_name" required>
 
+                            <input type="hidden" name="photographer_name" id="photographerNameInput">
+
                             <button type="submit" name="create_folder">Create Folder</button>
                         </form>
-                    </div>
 
-                    <div class="form-container">
-                        <h4>Rename a Folder</h4>
-                        <form action="manage-gallery.php" method="POST">
+                        <div class="form-container">
+                            <h4>Rename a Folder</h4>
+                            <form action="manage-gallery.php" method="POST">
                             <label for="old_folder_name">Old Folder Name:</label>
                             <input type="text" name="old_folder_name" required>
 
                             <label for="new_folder_name">New Folder Name:</label>
                             <input type="text" name="new_folder_name" required>
 
+                            <!-- Hidden input to pass photographer name -->
+                            <input type="hidden" name="photographer_name" id="photographerNameInput">
+
                             <button type="submit" name="rename_folder">Rename Folder</button>
                         </form>
-                    </div>
 
-                    <div class="form-container">
-                        <h4>Upload Photo</h4>
-                        <form action="manage-gallery.php" method="POST" enctype="multipart/form-data">
-                            <label for="photo">Select a Photo to Upload:</label>
-                            <input type="file" name="photo" accept="image/*" required>
+                        <div class="form-container">
+                            <h4>Upload Photo</h4>
+                            <form action="manage-gallery.php" method="POST" enctype="multipart/form-data">
+                                <label for="photo">Select a Photo to Upload:</label>
+                                <input type="file" name="photo" accept="image/*" required>
 
-                            <button type="submit">Upload Photo</button>
-                        </form>
-                    </div>
+                                <button type="submit">Upload Photo</button>
+                            </form>
+                        </div>
 
-                    <div class="form-container">
-                        <h4>Delete Folder</h4>
-                        <form action="manage-gallery.php" method="POST">
+                        <div class="form-container">
+                            <h4>Delete Folder</h4>
+                            <form action="manage-gallery.php" method="POST">
 
 
-                            <label for="event_name_delete">Event Name:</label>
-                            <input type="text" name="event_name_delete" required>
+                                <label for="event_name_delete">Event Name:</label>
+                                <input type="text" name="event_name_delete" required>
 
-                            <button type="submit" name="delete_folder">Delete Folder</button>
-                        </form>
+                                <button type="submit" name="delete_folder">Delete Folder</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             $(document).ready(function() {
-                $('.photographer-link').click(function(e) {
-                    e.preventDefault();
+            $('.photographer-link').click(function(e) {
+                e.preventDefault();
 
-                    var photographerName = $(this).data('name');
-                    var photographerId = $(this).data('id');
+                var photographerName = $(this).text();  // Get the photographer name
+                var photographerId = $(this).data('id');
 
-                    $('#photographerName').text(photographerName);
+                // Set photographer name in the hidden input field
+                $('#photographerNameInput').val(photographerName);
 
-                    $('#folderManagement').show();
-                });
+                $('#folderManagementPopup').show();
+                $('#photographerName').text(photographerName);
             });
+        });
 
             document.querySelectorAll('.photographer-link').forEach(function(link) {
                 link.addEventListener('click', function(event) {
@@ -274,10 +278,10 @@ $photographers = $query->fetchAll(PDO::FETCH_ASSOC);
 
             document.getElementById('closePopup').addEventListener('click', function() {
                 var popup = document.getElementById('folderManagementPopup');
-                popup.style.opacity = '0'; 
+                popup.style.opacity = '0';
                 setTimeout(function() {
                     popup.style.display = 'none';
-                }, 300); 
+                }, 300);
 
                 document.querySelector('.dashboard').classList.remove('popup-active');
             });

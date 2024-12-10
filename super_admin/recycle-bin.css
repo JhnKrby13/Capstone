@@ -168,13 +168,12 @@ body {
     padding-bottom: 5px;
 }
 
-/* Table Styling */
 .table {
     width: 100%;
     margin-bottom: 0;
     font-size: 14px;
     color: #333;
-    border-collapse: collapse; /* Ensures borders are cleanly joined */
+    border-collapse: collapse; 
 }
 
 .table thead th {

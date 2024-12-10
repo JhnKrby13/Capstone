@@ -31,8 +31,14 @@ function redirectUser($defaultLocation)
     exit();
 }
 
-$stmt = $pdo->query("SELECT * FROM bookings_archive");
-$archivedBookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+try {
+    $stmt = $pdo->query("SELECT * FROM booking_archive");
+    $archivedBookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+
 ?>
 
 
@@ -99,24 +105,30 @@ $archivedBookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <table class="table table-hover">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Package</th>
-                                        <th>Date</th>
-                                        <th>Deleted At</th>
-                                        <th>Actions</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Package Type</th>
+                                    <th>Date/Time</th>
+                                    <th>Venue</th>
+                                    <th>Price</th>
+                                    <th>Payment Mode</th>
+                                    <th>Status</th>
+                                    <th>Deleted At</th>
+                                    <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $stmt = $pdo->query("SELECT * FROM bookings_archive");
-                                    foreach ($stmt->fetchAll() as $booking): ?>
+                                    foreach ($archivedBookings as $booking): ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($booking['id']) ?></td>
+                                        <td><?= htmlspecialchars($booking['id']) ?></td>
                                             <td><?= htmlspecialchars($booking['name']) ?></td>
                                             <td><?= htmlspecialchars($booking['package_type']) ?></td>
                                             <td><?= htmlspecialchars($booking['datetime']) ?></td>
-                                            <td><span class="badge bg-danger"><?= htmlspecialchars($booking['deleted_at']) ?></span></td>
+                                            <td><?= htmlspecialchars($booking['venue']) ?></td>
+                                            <td><?= htmlspecialchars($booking['price']) ?></td>
+                                            <td><?= htmlspecialchars($booking['payment_mode']) ?></td>
+                                            <td><?= htmlspecialchars($booking['status']) ?></td>
                                             <td>
                                                 <button class="btn btn-success btn-sm">Restore</button>
                                                 <button class="btn btn-danger btn-sm">Delete Permanently</button>
@@ -140,6 +152,9 @@ $archivedBookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Contact</th>
+                                        <th>Address</th>
                                         <th>Deleted At</th>
                                         <th>Actions</th>
                                     </tr>
@@ -151,6 +166,9 @@ $archivedBookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <tr>
                                             <td><?= htmlspecialchars($photographer['id']) ?></td>
                                             <td><?= htmlspecialchars($photographer['name']) ?></td>
+                                            <td><?= htmlspecialchars($photographer['email']) ?></td>
+                                            <td><?= htmlspecialchars($photographer['contact']) ?></td>
+                                            <td><?= htmlspecialchars($photographer['address']) ?></td>
                                             <td><span class="badge bg-danger"><?= htmlspecialchars($photographer['deleted_at']) ?></span></td>
                                             <td>
                                                 <button class="btn btn-success btn-sm">Restore</button>
