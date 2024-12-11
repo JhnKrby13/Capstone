@@ -232,7 +232,6 @@ try {
                             </thead>
                             <tbody>
                                 <?php
-                                // Fetch archived packages
                                 $stmt = $pdo->query("SELECT * FROM package_archive");
                                 $archivedPackages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -276,30 +275,41 @@ try {
                                     <th>Address</th>
                                     <th>Email</th>
                                     <th>Contact</th>
+                                    <th>Deleted At</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                foreach ($archivedUsers as $user): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($client['id']) ?></td>
-                                        <td><?= htmlspecialchars($client['firstname']) ?></td>
-                                        <td><?= htmlspecialchars($client['lastname']) ?></td>
-                                        <td><?= htmlspecialchars($client['address']) ?></td>
-                                        <td><?= htmlspecialchars($client['contact']) ?></td>
-                                        <td><span class="badge bg-danger"><?= htmlspecialchars($client['deleted_at']) ?></span></td>
-                                        <td>
-                                            <button class="btn btn-success btn-sm">Restore</button>
-                                            <button class="btn btn-danger btn-sm">Delete Permanently</button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
+                                $stmt = $pdo->query("SELECT * FROM user_archive");
+                                $archivedUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                if ($archivedUsers) {
+                                    foreach ($archivedUsers as $user) {
+                                        echo "<tr>";
+                                        echo "<td>" . htmlspecialchars($user['id']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($user['firstname']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($user['lastname']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($user['address']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($user['email']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($user['contact']) . "</td>";
+                                        echo "<td><span class='badge bg-danger'>" . htmlspecialchars($client['deleted_at']) . "</span></td>";
+                                        echo "<td>";
+                                        echo '<a href="javascript:void(0);" class="btn btn-success btn-sm" onclick="restoreClient(' . $client['id'] . ')">Restore</a> ';
+                                        echo '<a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="deleteClient(' . $client['id'] . ')">Delete Permanently</a>';
+                                        echo "</td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='8'>No archived users found.</td></tr>";
+                                }
+                                ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
 
         </div>
     </div>
@@ -495,7 +505,7 @@ try {
                             if (response === 'success') {
                                 Swal.fire('Restored!', 'The package has been restored.', 'success');
                                 setTimeout(function() {
-                                    location.reload(); 
+                                    location.reload();
                                 }, 1500);
                             } else {
                                 Swal.fire('Failed!', 'There was an issue restoring the package.', 'error');
@@ -529,7 +539,7 @@ try {
                             if (response === 'success') {
                                 Swal.fire('Deleted!', 'The package has been permanently deleted.', 'success');
                                 setTimeout(function() {
-                                    location.reload(); 
+                                    location.reload();
                                 }, 1500);
                             } else {
                                 Swal.fire('Failed!', 'There was an issue deleting the package.', 'error');
@@ -539,6 +549,82 @@ try {
                             Swal.fire('Error!', 'An error occurred. Please try again later.', 'error');
                         }
                     });
+                }
+            });
+        }
+
+        function restoreClient(userId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to restore this client?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, restore it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('restore_user.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                id: userId
+                            })
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            if (data.trim() === 'Client restored successfully!') {
+                                Swal.fire('Restored!', 'The client has been restored.', 'success')
+                                    .then(() => {
+                                        location.reload();
+                                    });
+                            } else {
+                                Swal.fire('Error!', data, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            Swal.fire('Error!', 'There was a problem restoring the client.', 'error');
+                        });
+                }
+            });
+        }
+
+        function deleteClient(userId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('delete_user.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                id: userId
+                            })
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            if (data.trim() === 'Client deleted successfully!') {
+                                Swal.fire('Deleted!', 'The client has been permanently deleted.', 'success')
+                                    .then(() => {
+                                        location.reload();
+                                    });
+                            } else {
+                                Swal.fire('Error!', data, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            Swal.fire('Error!', 'There was a problem deleting the client.', 'error');
+                        });
                 }
             });
         }

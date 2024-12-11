@@ -233,34 +233,32 @@ try {
                 confirmButtonText: 'Yes, archive it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Perform the AJAX request to archive the package
                     fetch('archive_package.php', {
-                            method: 'GET', // You can use POST as well
+                            method: 'GET', 
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             },
                             body: new URLSearchParams({
-                                'id': packageId // Send the package ID
+                                'id': packageId 
                             })
                         })
                         .then(response => response.text())
                         .then(data => {
-                            console.log(data); // Debugging step: see the response from PHP
-                            // Check if the package was archived successfully
+                            console.log(data); 
                             if (data.trim() === 'Package archived successfully!') {
                                 Swal.fire(
                                     'Archived!',
                                     'The package has been successfully archived.',
                                     'success'
                                 ).then(() => {
-                                    window.location.href = 'manage-packages.php'; // Redirect after success
+                                    window.location.href = 'manage-packages.php'; 
                                 });
                             } else {
-                                Swal.fire('Error!', data, 'error'); // Show error if something goes wrong
+                                Swal.fire('Error!', data, 'error'); 
                             }
                         })
                         .catch(error => {
-                            console.error(error); // Log any AJAX error
+                            console.error(error); 
                             Swal.fire('Error!', 'There was a problem archiving the package.', 'error');
                         });
                 }
