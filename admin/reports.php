@@ -146,10 +146,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             },
                             series: [{
                                 name: 'Bookings',
-                                data: <?php echo json_encode($bookingCounts); ?> // PHP array of booking counts
+                                data: <?php echo json_encode($bookingCounts); ?> 
                             }],
                             xaxis: {
-                                categories: <?php echo json_encode($packageNames); ?> // PHP array of package names
+                                categories: <?php echo json_encode($packageNames); ?> 
                             },
                             fill: {
                                 opacity: 0.5
