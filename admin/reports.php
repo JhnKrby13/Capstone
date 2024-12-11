@@ -13,6 +13,22 @@ if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "photographer") {
     }
 }
 
+$query = "SELECT package_type, COUNT(*) AS bookings_count, SUM(price) AS total_revenue 
+          FROM booking 
+          GROUP BY package_type 
+          ORDER BY bookings_count DESC";
+$stmt = $pdo->query($query);
+
+$packageNames = [];
+$bookingCounts = [];
+$totalRevenue = [];
+
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $packageNames[] = $row['package_type'];
+    $bookingCounts[] = $row['bookings_count'];
+    $totalRevenue[] = $row['total_revenue'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +101,6 @@ if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "photographer") {
                 </div>
             </div>
 
-            <!-- Bookings per Photographer -->
             <div class="report-section">
                 <h2>Bookings per Photographer</h2>
                 <table class="table">
@@ -102,13 +117,13 @@ if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "photographer") {
                         $stmt = $pdo->query($query);
 
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            // Corrected query to fetch the 'name' column
+
                             $photographerQuery = "SELECT name FROM photographers WHERE id = " . $row['photographer_id'];
                             $photographerResult = $pdo->query($photographerQuery);
                             $photographer = $photographerResult->fetch(PDO::FETCH_ASSOC);
 
                             echo "<tr>";
-                            echo "<td>" . $photographer['name'] . "</td>";  // Use 'name' instead of 'firstname' and 'lastname'
+                            echo "<td>" . $photographer['name'] . "</td>";
                             echo "<td>" . $row['bookings_count'] . "</td>";
                             echo "<td>" . number_format($row['total_revenue'], 2) . "</td>";
                             echo "</tr>";
@@ -119,29 +134,31 @@ if ($_SESSION["role"] === "admin" || $_SESSION["role"] === "photographer") {
             </div>
             <div class="report-section">
                 <h2>Most Popular Packages</h2>
-                <canvas id="popularPackagesChart" width="400" height="200"></canvas>
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <div id="popularPackagesChart"></div>
+
+                <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
                 <script>
-                    var ctx = document.getElementById('popularPackagesChart').getContext('2d');
-                    var popularPackagesChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: ['Package 1', 'Package 2', 'Package 3'], 
-                            datasets: [{
-                                label: 'Bookings',
-                                data: [12, 19, 3], 
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var options = {
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+                            series: [{
+                                name: 'Bookings',
+                                data: <?php echo json_encode($bookingCounts); ?> // PHP array of booking counts
+                            }],
+                            xaxis: {
+                                categories: <?php echo json_encode($packageNames); ?> // PHP array of package names
+                            },
+                            fill: {
+                                opacity: 0.5
+                            },
+                            colors: ['#36A2EB']
+                        };
+
+                        var chart = new ApexCharts(document.querySelector("#popularPackagesChart"), options);
+                        chart.render();
                     });
                 </script>
             </div>
